@@ -1,0 +1,40 @@
+<template class="task-template">
+  <section id="app-automate-section" class="section js-section u-category-native-ui">
+    <header class="section-header">
+      <div class="section-wrapper">
+        <h1>
+          <svg class="section-icon"><use xlink:href="assets/img/icons.svg#icon-native-ui"></use></svg>
+          App Automate
+        </h1>
+        <h3>Upload your App for Automation Testing</h3>
+        <form id='appautomate'>
+
+        Select your .apk/.ipa file: <input type="file" id="appautomatefile"><br><br>
+        Custom id (Optional) : <input type="text" name="" id="app_auto_custom_id" value="">
+        <div id="appautostatu">
+<img src="./assets/img/loader.gif" id="loader" alt="" style="height:50px;width:50px" hidden>
+<p id="appautostatus" hidden></p>
+
+      </div>
+          <br>
+        <input id='uploadappautomate' type="button" value="Upload">
+        </form>
+        <div class="demo">
+    <button type="button" name="button" id="getapp" onclick=load_apps>Get Uploaded App for App-Automate</button>
+    <br>
+    <br>
+    <div class="" id="app_table">
+
+    </div>
+            </div>
+      </div>
+    </header>
+
+
+
+    <script type="text/javascript">
+      require('./renderer-process/native-ui/ex-links-file-manager/uploadautomate');
+    </script>
+
+  </section>
+</template>

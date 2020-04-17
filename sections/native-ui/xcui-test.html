@@ -1,0 +1,46 @@
+<template class="task-template">
+  <section id="xcui-test-section" class="section js-section u-category-native-ui">
+    <header class="section-header">
+      <div class="section-wrapper">
+        <h1>
+          <svg class="section-icon"><use xlink:href="assets/img/icons.svg#icon-native-ui"></use></svg>
+          XCUI Test
+        </h1>
+        <h3>Upload your XCUI Test Suite </h3>
+        <form id='xcui'>
+
+        Select your .zip file: <input type="file" id="xcuifile"><br><br>
+        Custom id (Optional) : <input type="text" name="" id="xcui_custom_id" value="">
+        <div id="xcuistatu">
+          <img src="./assets/img/loader.gif" id="xcui-loader" alt="" style="height:50px;width:50px" hidden>
+          <p id="xcuistatus" hidden></p>
+      </div>
+          <br>
+        <input id='uploadxcui' type="button" value="Upload">
+        </form>
+        <br>
+        <div class="demoxcui">
+
+    <button type="button" name="button" id="getxcui" onclick=load_apps>Get Uploaded XCUI Test-Suite</button>
+    <br>
+    <br>
+    <div class="" id="xcui_table">
+
+    </div>
+        </div>
+<hr>
+        <h3>Run XCUI TestSuite</h3>
+
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+
+      </div>
+    </header>
+
+
+
+    <script type="text/javascript">
+      require('./renderer-process/native-ui/xcui/xcui');
+    </script>
+
+  </section>
+</template>

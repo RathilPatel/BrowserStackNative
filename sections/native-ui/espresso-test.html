@@ -1,0 +1,48 @@
+<template class="task-template">
+  <section id="espresso-test-section" class="section js-section u-category-native-ui">
+    <header class="section-header">
+      <div class="section-wrapper">
+        <h1>
+          <svg class="section-icon"><use xlink:href="assets/img/icons.svg#icon-native-ui"></use></svg>
+          Espresso Test
+        </h1>
+        <h3>Upload your Espresso Test Suite </h3>
+        <form id='espresso'>
+
+        Select your .apk file: <input type="file" id="espressofile"><br><br>
+        Custom id (Optional) : <input type="text" name="" id="espresso_custom_id" value="">
+        <div id="espressostatu">
+          <img src="./assets/img/loader.gif" id="espresso-loader" alt="" style="height:50px;width:50px" hidden>
+          <p id="espressostatus" hidden></p>
+      </div>
+          <br>
+        <input id='uploadespresso' type="button" value="Upload">
+        </form>
+        <br>
+        <div class="demoespresso">
+
+    <button type="button" name="button" id="getespresso" onclick=load_apps>Get Uploaded Espresso Test-Suite</button>
+    <br>
+    <br>
+    <div class="" id="espresso_table">
+
+    </div>
+        </div>
+<hr>
+        <h3>Run Espresso TestSuite</h3>
+
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+
+
+
+      </div>
+    </header>
+
+
+
+    <script type="text/javascript">
+      require('./renderer-process/native-ui/espresso/espresso');
+    </script>
+
+  </section>
+</template>

@@ -1,0 +1,49 @@
+<template class="task-template">
+  <section id="ex-links-file-manager-section" class="section js-section u-category-native-ui">
+    <header class="section-header">
+      <div class="section-wrapper">
+        <h1>
+          <svg class="section-icon"><use xlink:href="assets/img/icons.svg#icon-native-ui"></use></svg>
+          BrowserStack Details
+        </h1>
+        <h3>Enter your BrowserStack username and access key</h3>
+
+
+
+        <p>
+          <ul>
+            <li>Go to Capabilities Page:<a href="https://www.browserstack.com/automate/capabilities">here<span class="u-visible-to-screen-reader">(opens in new window)</span></a></li>
+            <li>Select Nodejs Language</li>
+            <li>Select All the capabilities you need</li>
+            <li>Click on copy to clipboard and paste below</li>
+          </ul>
+        </p>
+        <br>
+
+        <form id='parameters'>
+          Capabilities:<br>
+          <textarea id="other" style="width:400px; height:100px;">
+</textarea>
+
+          <br>
+          No. of Parallel Test: <input type="text" id="parallel" name="parallel">
+          <br>
+        Select a .side file: <input type="file" id="myFile"><br><br>
+
+        <br>
+        <br>
+
+          <br>
+        <input id='run-on-bs' type="button" value="Run on BrowserStack">
+        </form>
+      </div>
+    </header>
+
+
+
+    <script type="text/javascript">
+      require('./renderer-process/native-ui/ex-links-file-manager/run-side-runner')
+    </script>
+
+  </section>
+</template>

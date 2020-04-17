@@ -1,0 +1,40 @@
+<template class="task-template">
+  <section id="app-live-section" class="section js-section u-category-native-ui">
+    <header class="section-header">
+      <div class="section-wrapper">
+        <h1>
+          <svg class="section-icon"><use xlink:href="assets/img/icons.svg#icon-native-ui"></use></svg>
+          App Live
+        </h1>
+        <h3>Upload your App for Manual Testing</h3>
+        <form id='applive'>
+
+        Select your .apk/.ipa file: <input type="file" id="applivefile"><br><br>
+        <div id="applivestatu">
+          <img src="./assets/img/loader.gif" id="live-loader" alt="" style="height:50px;width:50px" hidden>
+          <p id="applivestatus" hidden></p>
+      </div>
+          <br>
+        <input id='uploadapplive' type="button" value="Upload">
+        </form>
+        <br>
+        <div class="demolive">
+
+    <button type="button" name="button" id="getapplive" onclick=load_apps>Get Uploaded App for App-Live</button>
+    <br>
+    <br>
+    <div class="" id="applive_table">
+
+    </div>
+        </div>
+      </div>
+    </header>
+
+
+
+    <script type="text/javascript">
+      require('./renderer-process/native-ui/ex-links-file-manager/applive');
+    </script>
+
+  </section>
+</template>
