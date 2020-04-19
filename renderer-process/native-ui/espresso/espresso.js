@@ -9,8 +9,7 @@ const autostatus = document.getElementById('espressostatus');
 var button = document.getElementById('getespresso');
 button.onclick = load_apps;
 const upload = document.getElementById('uploadespresso')
-var username=document.getElementById('username').value
-var key=document.getElementById('accesskey').value
+
 
 
 function execute(command, callback) {
@@ -22,6 +21,8 @@ function execute(command, callback) {
 // --------------- Upload Zip File --------------------//
 
 upload.addEventListener('click', (event) => {
+  var username=document.getElementById('username').value
+  var key=document.getElementById('accesskey').value
   const filepath=document.getElementById('espressofile').files[0].path
   document.getElementById('espresso-loader').removeAttribute("hidden");
   document.getElementById('espressostatus').setAttribute("hidden","true");
@@ -65,6 +66,8 @@ upload.addEventListener('click', (event) => {
 // --------------- Get Recent Upload on espresso  --------------------//
 
 function load_apps() {
+  var username=document.getElementById('username').value
+  var key=document.getElementById('accesskey').value
   var options = {
     method: 'GET',
     url: 'https://'+username+':'+key+'@api-cloud.browserstack.com/app-automate/espresso/test-suites',
@@ -146,6 +149,8 @@ function load_apps() {
 
 // --------------- Delete espresso dir --------------------//
 function deleteapp(element) {
+  var username=document.getElementById('username').value
+  var key=document.getElementById('accesskey').value
   console.log(element);
   var options = {
     url: 'https://'+username+':'+key+'@api-cloud.browserstack.com/app-automate/espresso/test-suites/'+element,

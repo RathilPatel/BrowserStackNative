@@ -9,8 +9,7 @@ const autostatus = document.getElementById('earlgreystatus');
 var button = document.getElementById('getearlgrey');
 button.onclick = load_apps;
 const upload = document.getElementById('uploadearlgrey')
-var username=document.getElementById('username').value
-var key=document.getElementById('accesskey').value
+
 
 
 function execute(command, callback) {
@@ -22,6 +21,8 @@ function execute(command, callback) {
 // --------------- Upload Zip File --------------------//
 
 upload.addEventListener('click', (event) => {
+  var username=document.getElementById('username').value
+  var key=document.getElementById('accesskey').value
   const filepath=document.getElementById('earlgreyfile').files[0].path
   document.getElementById('earlgrey-loader').removeAttribute("hidden");
   document.getElementById('earlgreystatus').setAttribute("hidden","true");
@@ -64,6 +65,8 @@ upload.addEventListener('click', (event) => {
 // --------------- Get Recent Upload on EarlGrey  --------------------//
 
 function load_apps() {
+  var username=document.getElementById('username').value
+  var key=document.getElementById('accesskey').value
   var options = {
     method: 'GET',
     url: 'https://'+username+':'+key+'@api-cloud.browserstack.com/app-automate/earlgrey/app-dirs',
@@ -146,6 +149,8 @@ function load_apps() {
 // --------------- Delete EarlGrey dir --------------------//
 
 function deleteapp(element) {
+  var username=document.getElementById('username').value
+  var key=document.getElementById('accesskey').value
   console.log(element);
   var options = {
     url: 'https://'+username+':'+key+'@api-cloud.browserstack.com/app-automate/earlgrey/app-dirs/'+element,

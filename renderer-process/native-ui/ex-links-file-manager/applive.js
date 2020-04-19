@@ -8,8 +8,7 @@ const autostatus = document.getElementById('applivestatus');
 var button = document.getElementById('getapplive');
 button.onclick = load_apps;
 const upload = document.getElementById('uploadapplive')
-var username=document.getElementById('username').value
-var key=document.getElementById('accesskey').value
+
 
 
 function execute(command, callback) {
@@ -21,6 +20,8 @@ function execute(command, callback) {
 // call the function
 
 upload.addEventListener('click', (event) => {
+  var username=document.getElementById('username').value
+  var key=document.getElementById('accesskey').value
   const filepath=document.getElementById('applivefile').files[0].path
   document.getElementById('live-loader').removeAttribute("hidden");
   document.getElementById('applivestatus').setAttribute("hidden","true");
@@ -44,6 +45,8 @@ upload.addEventListener('click', (event) => {
 });
 
 function load_apps() {
+  var username=document.getElementById('username').value
+  var key=document.getElementById('accesskey').value
   var options = {
     method: 'GET',
     url: 'https://'+username+':'+key+'@api-cloud.browserstack.com/app-live/recent_apps',
@@ -120,6 +123,8 @@ function load_apps() {
 }
 
 function deleteapp(element) {
+  var username=document.getElementById('username').value
+  var key=document.getElementById('accesskey').value
   console.log(element);
   var options = {
     url: 'https://'+username+':'+key+'@api-cloud.browserstack.com/app-live/app/delete/'+element,
