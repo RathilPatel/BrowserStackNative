@@ -9,8 +9,7 @@ const autostatus = document.getElementById('appautostatus');
 var button = document.getElementById('getapp');
 button.onclick = load_apps;
 const upload = document.getElementById('uploadappautomate')
-var username=document.getElementById('username').value
-var key=document.getElementById('accesskey').value
+
 
 
 function execute(command, callback) {
@@ -22,6 +21,8 @@ function execute(command, callback) {
 // --------------- Upload Zip File --------------------//
 
 upload.addEventListener('click', (event) => {
+  var username=document.getElementById('username').value
+  var key=document.getElementById('accesskey').value
   const filepath=document.getElementById('appautomatefile').files[0].path
   // autostatus.innerHTML="uploading";
   document.getElementById('loader').removeAttribute("hidden");
@@ -64,6 +65,8 @@ upload.addEventListener('click', (event) => {
 // --------------- Get Recent Upload on espresso  --------------------//
 
 function load_apps() {
+  var username=document.getElementById('username').value
+  var key=document.getElementById('accesskey').value
   var options = {
     method: 'GET',
     url: 'https://'+username+':'+key+'@api-cloud.browserstack.com/app-automate/recent_apps',
@@ -142,6 +145,8 @@ function load_apps() {
 // --------------- Delete EarlGrey dir --------------------//
 
 function deleteapp(element) {
+  var username=document.getElementById('username').value
+  var key=document.getElementById('accesskey').value
   console.log(element);
   var options = {
     url: 'https://'+username+':'+key+'@api-cloud.browserstack.com/app-automate/app/delete/'+element,
