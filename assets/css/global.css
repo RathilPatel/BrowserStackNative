@@ -162,3 +162,7 @@ kbd {
 .hljs:active {
   outline: 1px solid transparent;
 }
+
+.black-text {
+  color: black;
+}
