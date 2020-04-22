@@ -9,8 +9,11 @@ const autostatus = document.getElementById('espressostatus');
 var button = document.getElementById('getespresso');
 button.onclick = load_apps;
 const upload = document.getElementById('uploadespresso')
-
-
+const copy = document.getElementById('espresso_copy_button')
+const espresso_app = document.getElementById('espressoapp')
+const espresso_test_app = document.getElementById('espressotestapp')
+const espresso_app_options = document.getElementById('refresh-app')
+const espresso_testapp_options = document.getElementById('refresh-testapp')
 
 function execute(command, callback) {
     exec(command, (error, stdout, stderr) => {
@@ -175,37 +178,179 @@ function copyappid(elementid) {
   clipboard.writeText(elementid);
 }
 
-// --------------- Change Accordion height --------------------//
+// --------------- Generate App Options List --------------------//
+espresso_app_options.addEventListener('click',(event) => {
 
-// function accordionHeight() {
-//   var acc = document.getElementsByClassName("accordion");
-// acc[0].classList.toggle("active");
-//   var panel = acc[0].nextElementSibling;
-//   panel.style.maxHeight = panel.scrollHeight + "px";
-//
-//   acc[0].classList.toggle("active");
-// }
+  var username=document.getElementById('username').value
+  var key=document.getElementById('accesskey').value
+  var options = {
+    method: 'GET',
+    url: 'https://'+username+':'+key+'@api-cloud.browserstack.com/app-automate/recent_apps'
+  };
+function callback(error, response, body) {
+    if (!error && response.statusCode == 200) {
+      espresso_app.innerHTML = ""
 
-// --------------- Accordion Setup and Control --------------------//
-// var acc = document.getElementsByClassName("accordion");
-// var i;
-// for (i = 0; i < acc.length; i++) {
-//
-//   acc[i].classList.toggle("active");
-//   var panel = acc[i].nextElementSibling;
-//   if (panel.style.maxHeight) {
-//     panel.style.maxHeight = null;
-//   } else {
-//     panel.style.maxHeight = panel.scrollHeight + "px";
-//   }
-//
-//   acc[i].addEventListener("click", function() {
-//     this.classList.toggle("active");
-//     var panel = this.nextElementSibling;
-//     if (panel.style.maxHeight) {
-//       panel.style.maxHeight = null;
-//     } else {
-//       panel.style.maxHeight = panel.scrollHeight + "px";
-//     }
-//   });
-// }
+      var options = document.createElement('option')
+      options.setAttribute("id","app-option1")
+      options.setAttribute("value","<hashed appid>")
+      espresso_app.appendChild(options)
+      document.getElementById('app-option1').innerHTML = "Select App"
+        parsedbody = JSON.parse(body);
+        for(i=0;i<parsedbody.length;i++){
+          var options = document.createElement('option')
+          options.setAttribute("value",parsedbody[i].app_id)
+          options.setAttribute("id",parsedbody[i].app_id)
+
+          espresso_app.appendChild(options)
+          document.getElementById(parsedbody[i].app_id).innerHTML =parsedbody[i].app_name+"-"+parsedbody[i].app_version
+        }
+    }
+    else {
+      console.log("error");
+    }
+}
+
+request(options, callback);
+});
+
+// --------------- Generate Test App Options List --------------------//
+
+espresso_testapp_options.addEventListener('click',(event) => {
+  var username=document.getElementById('username').value
+  var key=document.getElementById('accesskey').value
+  var options = {
+    method: 'GET',
+    url: 'https://'+username+':'+key+'@api-cloud.browserstack.com/app-automate/espresso/test-suites'
+  };
+function callback(error, response, body) {
+    if (!error && response.statusCode == 200) {
+        parsedbody = JSON.parse(body);
+        espresso_test_app.innerHTML = ""
+        var options = document.createElement('option')
+        options.setAttribute("id","test-option1")
+        options.setAttribute("value","<hashed testid>")
+        espresso_test_app.appendChild(options)
+        document.getElementById('test-option1').innerHTML = "Select Test"
+        for(i=0;i<parsedbody.length;i++){
+          var options = document.createElement('option')
+          options.setAttribute("value",parsedbody[i].test_suite_id)
+          options.setAttribute("id",parsedbody[i].test_suite_id)
+
+          espresso_test_app.appendChild(options)
+          document.getElementById(parsedbody[i].test_suite_id).innerHTML =parsedbody[i].test_suite_name
+        }
+    }
+    else {
+      console.log(response);
+    }
+}
+
+request(options, callback);
+});
+
+// --------------- Generating code snippet --------------------//
+
+espresso_app.addEventListener("change", (event) => {
+console.log("Change the App :"+espresso_app.value);
+espresso_curl_text(espresso_app.value,"app")
+});
+
+
+// --------------- Generating code snippet --------------------//
+
+espresso_test_app.addEventListener("change", (event) => {
+console.log("Changed the Test App");
+espresso_curl_text(espresso_test_app.value,"test")
+});
+
+
+// --------------- Generating code snippet --------------------//
+
+
+copy.addEventListener('click',(event) => {
+
+  clipboard.writeText(document.getElementById('espresso-curl-textarea').value)
+  console.log("copied");
+});
+
+// --------------- Generating code snippet --------------------//
+
+function espresso_curl_text(string,variable) {
+  var username=document.getElementById('username').value
+  var key=document.getElementById('accesskey').value
+  switch (variable) {
+    case 'app':
+      var app = string
+      break;
+    case 'test':
+    var test = string
+    break;
+    default:
+    break;
+
+  }
+  document.getElementById('espresso-curl-textarea').value = 'curl -X POST "https://api-cloud.browserstack.com/app-automate/espresso/build" -d \\ "{\\"devices\\": [\\"Samsung Galaxy S20-10.0\\"], \\"app\\": \\"bs://'+app+'\\", \\"deviceLogs\\" : true, \\"testSuite\\": \\"bs://'+test+'\\"}" -H "Content-Type: application/json" -u "'+username+':'+key+'"'
+}
+
+espresso_curl_text();
+
+
+
+
+
+// --------------- Generating android List --------------------//
+function android_device_list() {
+  var username=document.getElementById('username').value
+  var key=document.getElementById('accesskey').value
+
+  var options = {
+    url: 'https://'+username+':'+key+'@api-cloud.browserstack.com/app-automate/devices.json',
+};
+
+function callback(error, response, body) {
+    if (!error && response.statusCode == 200) {
+
+
+        // console.log(body);
+
+        parsedbody = JSON.parse(body);
+        for(i=0; i<parsedbody.length;i++){
+          if(parsedbody[i].os=='android'){
+            var device_div = document.getElementById('espresso-device-list');
+            if (i%3==0 && i>0) {
+              var br = document.createElement('br');
+              device_div.appendChild(br);
+              device_div.appendChild(br);
+
+
+            }
+            var select = document.createElement('input')
+            select.setAttribute("type","checkbox");
+            select.setAttribute("name",parsedbody[i].device+"-"+parsedbody[i].os_version);
+            select.setAttribute("id",parsedbody[i].device+"-"+parsedbody[i].os_version);
+            select.setAttribute("value",parsedbody[i].device+"-"+parsedbody[i].os_version);
+            var label = document.createElement('label')
+            label.setAttribute("for",parsedbody[i].device+"-"+parsedbody[i].os_version);
+            label.setAttribute("id",parsedbody[i].device+"-"+parsedbody[i].os_version+"label");
+
+
+
+            // var device_div = document.getElementById('espresso-device-list');
+            device_div.appendChild(select);
+            device_div.appendChild(label)
+            document.getElementById(parsedbody[i].device+"-"+parsedbody[i].os_version+"label").innerHTML = parsedbody[i].device+"-"+parsedbody[i].os_version
+            console.log(parsedbody[i].device+"-"+parsedbody[i].os_version);
+
+          }
+
+
+        }
+    }
+}
+
+request(options, callback);
+
+}
+
+// android_device_list();

@@ -35,47 +35,41 @@
 
           <label for="espressoapp">Select App:</label>
             <select id="espressoapp">
-                <option value="volvo">Volvo</option>
-                <option value="saab">Saab</option>
-                <option value="opel">Opel</option>
-                <option value="audi">Audi</option>
-            </select> <input type="button" name="refresh" value="refresh">
-            <br>
+
+            </select>
+             <input type="button" id="refresh-app" value="refresh">
+            <br><br>
             <label for="espressotestapp">Select Test App:</label>
               <select id="espressotestapp">
-                  <option value="volvo">Volvo</option>
-                  <option value="saab">Saab</option>
-                  <option value="opel">Opel</option>
-                  <option value="audi">Audi</option>
-              </select> <input type="button" name="refresh" value="refresh">
-              <br>
-              Parallel Limit : <input type="text" name="" value="0">
-              <div class="device-list" >
-                <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
-              <label for="vehicle1">Device 1</label>
-              <input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
-              <label for="vehicle2"> Device 2</label>
-              <input type="checkbox" id="vehicle3" name="vehicle3" value="Boat">
-              <label for="vehicle3">Device 3</label>
-              <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
-            <label for="vehicle1">Device 1</label>
-            <input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
-            <label for="vehicle2"> Device 2</label>
-            <input type="checkbox" id="vehicle3" name="vehicle3" value="Boat">
-            <label for="vehicle3">Device 3</label>
+
+              </select>
+              <input type="button" id="refresh-testapp" value="refresh">
+              <br><br>
+              <!-- Parallel Limit : <input type="text" name="" value="0"> <br><br> -->
+
+              <div class="device-list" id="espresso-device-list"  style="background:#f5f5f5;">
+                <input type="checkbox" name="Samsung Galaxy S20 Plus-10.0" id="Samsung Galaxy S20 Plus-10.0" value="Samsung Galaxy S20 Plus-10.0" onclick="checkbox(this)" checked>
+                <label for="Samsung Galaxy S20 Plus-10.0" id="Samsung Galaxy S20 Plus-10.0label">Samsung Galaxy S20 Plus-10.0</label><br>
+                <input type="checkbox" name="Google Pixel 3-10.0" id="Google Pixel 3-10.0" value="Google Pixel 3-10.0">
+                <label for="Google Pixel 3-10.0" id="Google Pixel 3-10.0label">Google Pixel 3-10.0</label><br>
+                <input type="checkbox" name="OnePlus 7-9.0" id="OnePlus 7-9.0" value="OnePlus 7-9.0">
+                <label for="OnePlus 7-9.0" id="OnePlus 7-9.0label">OnePlus 7-9.0</label><br>
+                <input type="checkbox" name="Google Nexus 6-6.0" id="Google Nexus 6-6.0" value="Google Nexus 6-6.0">
+                <label for="Google Nexus 6-6.0" id="Google Nexus 6-6.0label">Google Nexus 6-6.0</label><br>
+
               </div>
 
 
         <br>
-              <input type="submit" name="Run Test" value="Run Test">
-              <br>
-              <textarea name="name" rows="8" cols="80"></textarea>
+              <textarea name="espresso-curl" id="espresso-curl-textarea" rows="4" cols="100" disabled></textarea><br>
+              <input type="submit" name="Run Test" value="Run Test" disabled>
+<input type="button" id="espresso_copy_button" value="Copy to clipboard">
 
 
         </form>
 
 
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+          <!-- <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p> -->
 
 
 
