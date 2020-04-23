@@ -14,6 +14,12 @@ const espresso_app = document.getElementById('espressoapp')
 const espresso_test_app = document.getElementById('espressotestapp')
 const espresso_app_options = document.getElementById('refresh-app')
 const espresso_testapp_options = document.getElementById('refresh-testapp')
+var app = null
+var test = null
+var device = null
+var checked_devices = []
+
+
 
 function execute(command, callback) {
     exec(command, (error, stdout, stderr) => {
@@ -84,7 +90,7 @@ function load_apps() {
     parsedbody = JSON.parse(body);
     console.log(parsedbody);
     for(var i= 0;i<parsedbody.length;i++){
-      customers.push([parsedbody[i].test_suite_name,parsedbody[i].test_suite_id,parsedbody[i].custom_id,parsedbody[i].test_suite_id,parsedbody[i].test_suite_id]);
+      customers.push([parsedbody[i].test_suite_name,parsedbody[i].test_suite_id,parsedbody[i].custom_id,parsedbody[i].test_suite_url,parsedbody[i].test_suite_url]);
 
     }
    ///////////////////////////////////////////////////
@@ -249,15 +255,14 @@ function callback(error, response, body) {
 request(options, callback);
 });
 
-// --------------- Generating code snippet --------------------//
+// --------------- Loading Apps in Dropdown --------------------//
 
 espresso_app.addEventListener("change", (event) => {
-console.log("Change the App :"+espresso_app.value);
 espresso_curl_text(espresso_app.value,"app")
 });
 
 
-// --------------- Generating code snippet --------------------//
+// --------------- Loading Test App in Dropdown  --------------------//
 
 espresso_test_app.addEventListener("change", (event) => {
 console.log("Changed the Test App");
@@ -281,21 +286,57 @@ function espresso_curl_text(string,variable) {
   var key=document.getElementById('accesskey').value
   switch (variable) {
     case 'app':
-      var app = string
+      app = string
       break;
     case 'test':
-    var test = string
+    test = string
+    break;
+    case 'device':
+      device = string
     break;
     default:
     break;
 
   }
-  document.getElementById('espresso-curl-textarea').value = 'curl -X POST "https://api-cloud.browserstack.com/app-automate/espresso/build" -d \\ "{\\"devices\\": [\\"Samsung Galaxy S20-10.0\\"], \\"app\\": \\"bs://'+app+'\\", \\"deviceLogs\\" : true, \\"testSuite\\": \\"bs://'+test+'\\"}" -H "Content-Type: application/json" -u "'+username+':'+key+'"'
+  document.getElementById('espresso-curl-textarea').value = 'curl -X POST "https://api-cloud.browserstack.com/app-automate/espresso/build" -d \\ "{\\"devices\\": ['+device+'], \\"app\\": \\"bs://'+app+'\\", \\"deviceLogs\\" : true, \\"testSuite\\": \\"bs://'+test+'\\"}" -H "Content-Type: application/json" -u "'+username+':'+key+'"'
 }
 
-espresso_curl_text();
 
 
+
+// --------------- OnChange for Device function --------------------//
+function device_change(elem) {
+  // console.log(elem.id);
+  var x = document.querySelectorAll('.devices')
+  checked_devices = []
+  for (var i = 0; i < x.length; i++) {
+
+    if (x[i].checked) {
+      checked_devices.push(x[i].id)
+    }
+  }
+
+  device_string(checked_devices);
+
+}
+
+// --------------- changing device array to stirng --------------------//
+
+function device_string(checked_devices){
+var data = "";
+  for (i = 0 ; i<checked_devices.length;i++){
+    if(i == checked_devices.length-1){
+      data += '\\"'+checked_devices[i]+'\\"'
+    }
+    else{
+        data += '\\"'+checked_devices[i]+'\\",'
+    }
+
+  }
+  espresso_curl_text(data,'device');
+  // console.log(data);
+
+}
 
 
 
@@ -315,21 +356,18 @@ function callback(error, response, body) {
         // console.log(body);
 
         parsedbody = JSON.parse(body);
+        var device_div = document.getElementById('espresso-device-list');
         for(i=0; i<parsedbody.length;i++){
           if(parsedbody[i].os=='android'){
-            var device_div = document.getElementById('espresso-device-list');
-            if (i%3==0 && i>0) {
-              var br = document.createElement('br');
-              device_div.appendChild(br);
-              device_div.appendChild(br);
-
-
-            }
             var select = document.createElement('input')
             select.setAttribute("type","checkbox");
+            select.setAttribute("class","devices");
             select.setAttribute("name",parsedbody[i].device+"-"+parsedbody[i].os_version);
             select.setAttribute("id",parsedbody[i].device+"-"+parsedbody[i].os_version);
             select.setAttribute("value",parsedbody[i].device+"-"+parsedbody[i].os_version);
+            select.addEventListener('change',function(){
+              device_change(this);
+            });
             var label = document.createElement('label')
             label.setAttribute("for",parsedbody[i].device+"-"+parsedbody[i].os_version);
             label.setAttribute("id",parsedbody[i].device+"-"+parsedbody[i].os_version+"label");
@@ -338,9 +376,11 @@ function callback(error, response, body) {
 
             // var device_div = document.getElementById('espresso-device-list');
             device_div.appendChild(select);
-            device_div.appendChild(label)
+            device_div.appendChild(label);
+            var br = document.createElement('br');
+            device_div.appendChild(br);
             document.getElementById(parsedbody[i].device+"-"+parsedbody[i].os_version+"label").innerHTML = parsedbody[i].device+"-"+parsedbody[i].os_version
-            console.log(parsedbody[i].device+"-"+parsedbody[i].os_version);
+            // console.log(parsedbody[i].device+"-"+parsedbody[i].os_version);
 
           }
 
@@ -353,4 +393,6 @@ request(options, callback);
 
 }
 
-// android_device_list();
+espresso_curl_text();
+
+android_device_list();
