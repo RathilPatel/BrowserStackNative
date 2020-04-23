@@ -394,5 +394,8 @@ request(options, callback);
 }
 
 espresso_curl_text();
+document.getElementById('refresh-device').addEventListener('click',(event) =>{
+  console.log("here");
+  android_device_list();
 
-android_device_list();
+});

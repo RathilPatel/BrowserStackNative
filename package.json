@@ -1,7 +1,7 @@
 {
-  "name": "electron-api-demos",
+  "name": "BStack-Native",
   "productName": "Electron API Demos",
-  "version": "2.0.2",
+  "version": "1.0.1",
   "description": "Electron interactive API demos",
   "main": "main.js",
   "bin": "cli.js",
@@ -22,11 +22,11 @@
     "prepack": "check-for-leaks",
     "prepush": "check-for-leaks"
   },
-  "repository": "https://github.com/electron/electron-api-demos",
+  "repository": "https://github.com/RathilVasani/BrowserStackNative",
   "keywords": [
-    "Electron",
-    "API",
-    "demo"
+    "BrowserStack",
+    "App-Automate",
+    "Helper"
   ],
   "author": "GitHub",
   "license": "MIT",
@@ -45,12 +45,12 @@
     "rimraf": "^2.5.2",
     "signcode": "^0.5.0",
     "spectron": "^5.0.0",
-    "standard": "^8.2.0"
+    "standard": "^8.2.0",
+    "electron": "^5.0.13",
+    "electron-builder": "^22.4.1"
   },
   "dependencies": {
     "browserstack-local": "^1.4.3",
-    "electron": "^5.0.13",
-    "electron-builder": "^22.4.1",
     "electron-log": "^2.2.14",
     "electron-settings": "^3.0.7",
     "electron-shortcut-normalizer": "^1.0.0",
