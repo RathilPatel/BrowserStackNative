@@ -24,7 +24,7 @@
   <br>
   <div class="demolive">
 
-<button type="button" name="button" id="getearlgrey" onclick=load_apps>Get Uploaded </button>
+<button type="button" name="button" id="getearlgrey" onclick=load_apps>Get Uploaded Test-Suite</button>
 <br>
 <br>
 <div class="" id="earlgrey_table">
@@ -34,6 +34,44 @@
 <hr>
 
 <h3>Run EarlGrey TestSuite</h3>
+
+<form class="" >
+
+  <label for="earlgreyapp">Select App:</label>
+    <select id="earlgreyapp">
+
+    </select>
+     <input type="button" id="earlgrey-refresh-app" value="refresh">
+    <br><br>
+    <!-- <label for="earlgreytestapp">Select Test App:</label>
+      <select id="earlgreytestapp">
+
+      </select>
+      <input type="button" id="earlgrey-refresh-testapp" value="refresh">
+      <br><br> -->
+      <!-- Parallel Limit : <input type="text" name="" value="0"> <br><br> -->
+      Device List :
+      <input type="button" id="earlgrey-refresh-device" value="refresh">
+      <div class="device-list" id="earlgrey-device-list"  style="background:#f5f5f5;height:150px;overflow:scroll">
+        <!-- <input class="devices" type="checkbox" name="Samsung Galaxy S20 Plus-10.0" id="Samsung Galaxy S20 Plus-10.0" value="Samsung Galaxy S20 Plus-10.0" checked>
+        <label for="Samsung Galaxy S20 Plus-10.0" id="Samsung Galaxy S20 Plus-10.0label">Samsung Galaxy S20 Plus-10.0</label><br>
+        <input class="devices" type="checkbox" name="Google Pixel 3-10.0" id="Google Pixel 3-10.0" value="Google Pixel 3-10.0">
+        <label for="Google Pixel 3-10.0" id="Google Pixel 3-10.0label">Google Pixel 3-10.0</label><br>
+        <input class="devices" type="checkbox" name="OnePlus 7-9.0" id="OnePlus 7-9.0" value="OnePlus 7-9.0">
+        <label for="OnePlus 7-9.0" id="OnePlus 7-9.0label">OnePlus 7-9.0</label><br>
+        <input class="devices" type="checkbox" name="Google Nexus 6-6.0" id="Google Nexus 6-6.0" value="Google Nexus 6-6.0">
+        <label for="Google Nexus 6-6.0" id="Google Nexus 6-6.0label">Google Nexus 6-6.0</label><br> -->
+
+      </div>
+
+
+<br>
+      <textarea name="earlgrey-curl" id="earlgrey-curl-textarea" rows="5" cols="133" disabled></textarea><br>
+      <input type="button" name="Run Test" value="Run Test" disabled>
+<input type="button" id="earlgrey_copy_button" value="Copy to clipboard">
+
+
+</form>
 
   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
 
