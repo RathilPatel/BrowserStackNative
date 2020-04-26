@@ -1,6 +1,7 @@
 {
   "name": "BStack-Native",
   "productName": "Electron API Demos",
+  "version":"1.0.1",
   "description": "BrowserStack App Testing Helper Tool",
   "main": "main.js",
   "bin": "cli.js",
@@ -21,9 +22,6 @@
     "release": "node ./script/release.js",
     "prepack": "check-for-leaks",
     "prepush": "check-for-leaks"
-  },
-  "build":{
-    "version":"1.0.1"
   },
   "repository": "https://github.com/RathilVasani/BrowserStackNative",
   "keywords": [
