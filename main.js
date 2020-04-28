@@ -47,11 +47,11 @@ function initialize () {
 `);
 
     // Launch fullscreen with DevTools open, usage: npm run debug
-    if (debug) {
-      mainWindow.webContents.openDevTools()
-      mainWindow.maximize()
-      require('devtron').install()
-    }
+    // if (debug) {
+    //   mainWindow.webContents.openDevTools()
+    //   mainWindow.maximize()
+    //   require('devtron').install()
+    // }
 
     mainWindow.on('closed', () => {
       mainWindow = null
