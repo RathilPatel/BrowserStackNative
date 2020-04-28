@@ -3,7 +3,7 @@
 set -ex
 
 # App Store does not allow the word "demos" in the app's name
-APP="Electron APIs"
+APP="BStack"
 
 electron-packager . \
   "$APP" \
@@ -11,7 +11,7 @@ electron-packager . \
   --asar-unpack=protocol-link.html \
   --overwrite \
   --platform=mas \
-  --app-bundle-id=com.github.electron-api-demos \
+  --app-bundle-id=com.browserstack.native \
   --app-version="$npm_package_version" \
   --build-version="1.1.0" \
   --arch=x64 \
