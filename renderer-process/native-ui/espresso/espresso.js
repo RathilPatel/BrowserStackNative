@@ -128,8 +128,8 @@ function load_apps() {
                      // button.onclick =  deleteapp;
                      cell.appendChild(button);
                    }else if (j == columnCount-1) {
-                     var button = document.createElement('input');
-                     button.setAttribute('type','button');
+                     var button = document.createElement('button');
+                     button.setAttribute('class','copy_button');
                      button.setAttribute('value', 'copy');
                      button.setAttribute('name','copy_button');
                      button.setAttribute('id', customers[i][j]);
@@ -147,6 +147,11 @@ function load_apps() {
            var dvTable = document.getElementById("espresso_table");
            dvTable.innerHTML = "";
            dvTable.appendChild(table);
+
+           x = document.querySelectorAll('.copy_button')
+           for (var i = 0; i < x.length; i++) {
+             x[i].innerHTML = '<img src ="assets/img/copy.png" ,alt="copy" style="height:10px;width:10px">'
+           }
 
 
   });
@@ -396,6 +401,7 @@ request(options, callback);
 espresso_curl_text();
 document.getElementById('refresh-device').addEventListener('click',(event) =>{
   console.log("here");
+  document.getElementById('espresso-device-list').innerHTML=""
   android_device_list();
 
 });

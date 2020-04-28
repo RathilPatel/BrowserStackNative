@@ -124,8 +124,8 @@ function load_apps() {
                      // button.onclick =  deleteapp;
                      cell.appendChild(button);
                    }else if (j == columnCount-1) {
-                     var button = document.createElement('input');
-                     button.setAttribute('type','button');
+                     var button = document.createElement('button');
+                     button.setAttribute('class','copy_button');
                      button.setAttribute('value', 'copy');
                      button.setAttribute('name','copy_button');
                      button.setAttribute('id', customers[i][j]);
@@ -144,7 +144,10 @@ function load_apps() {
            dvTable.innerHTML = "";
            dvTable.appendChild(table);
 
-
+           x = document.querySelectorAll('.copy_button')
+           for (var i = 0; i < x.length; i++) {
+             x[i].innerHTML = '<img src ="assets/img/copy.png" ,alt="copy" style="height:10px;width:10px">'
+           }
   });
 
 }
@@ -390,43 +393,7 @@ request(options, callback);
 earlgrey_curl_text();
 document.getElementById('earlgrey-refresh-device').addEventListener('click',(event) =>{
   console.log("here");
+  document.getElementById('earlgrey-device-list').innerHTML=""
   ios_device_list();
 
 });
-
-
-
-// --------------- Change Accordion height --------------------//
-
-// function accordionHeight() {
-//   var acc = document.getElementsByClassName("accordion");
-// acc[0].classList.toggle("active");
-//   var panel = acc[0].nextElementSibling;
-//   panel.style.maxHeight = panel.scrollHeight + "px";
-//
-//   acc[0].classList.toggle("active");
-// }
-
-// --------------- Accordion Setup and Control --------------------//
-// var acc = document.getElementsByClassName("accordion");
-// var i;
-// for (i = 0; i < acc.length; i++) {
-//
-//   acc[i].classList.toggle("active");
-//   var panel = acc[i].nextElementSibling;
-//   if (panel.style.maxHeight) {
-//     panel.style.maxHeight = null;
-//   } else {
-//     panel.style.maxHeight = panel.scrollHeight + "px";
-//   }
-//
-//   acc[i].addEventListener("click", function() {
-//     this.classList.toggle("active");
-//     var panel = this.nextElementSibling;
-//     if (panel.style.maxHeight) {
-//       panel.style.maxHeight = null;
-//     } else {
-//       panel.style.maxHeight = panel.scrollHeight + "px";
-//     }
-//   });
-// }
