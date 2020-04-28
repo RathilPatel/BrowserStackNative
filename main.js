@@ -8,7 +8,7 @@ const {app, BrowserWindow} = require('electron')
 
 const debug = /--debug/.test(process.argv[2])
 
-if (process.mas) app.setName('Electron APIs')
+if (process.mas) app.setName('BrowserStackNative')
 
 let mainWindow = null
 
@@ -35,12 +35,23 @@ function initialize () {
     mainWindow = new BrowserWindow(windowOptions)
     mainWindow.loadURL(path.join('file://', __dirname, '/index.html'))
 
+    mainWindow.webContents.executeJavaScript(`
+  var path = require('path');
+  module.paths.push(path.resolve('node_modules'));
+  module.paths.push(path.resolve('../node_modules'));
+  module.paths.push(path.resolve(__dirname, '..', '..', 'electron', 'node_modules'));
+  module.paths.push(path.resolve(__dirname, '..', '..', 'electron.asar', 'node_modules'));
+  module.paths.push(path.resolve(__dirname, '..', '..', 'app', 'node_modules'));
+  module.paths.push(path.resolve(__dirname, '..', '..', 'app.asar', 'node_modules'));
+  path = undefined;
+`);
+
     // Launch fullscreen with DevTools open, usage: npm run debug
-    if (debug) {
-      mainWindow.webContents.openDevTools()
-      mainWindow.maximize()
-      require('devtron').install()
-    }
+    // if (debug) {
+    //   mainWindow.webContents.openDevTools()
+    //   mainWindow.maximize()
+    //   require('devtron').install()
+    // }
 
     mainWindow.on('closed', () => {
       mainWindow = null

@@ -9,6 +9,15 @@ const autostatus = document.getElementById('xcuistatus');
 var button = document.getElementById('getxcui');
 button.onclick = load_apps;
 const upload = document.getElementById('uploadxcui')
+const xcui_copy = document.getElementById('xcui_copy_button')
+const xcui_app = document.getElementById('xcuiapp')
+const xcui_test_app = document.getElementById('xcuitestapp')
+const xcui_app_options = document.getElementById('xcui-refresh-app')
+const xcui_testapp_options = document.getElementById('xcui-refresh-testapp')
+var app = null
+var test = null
+var device = null
+var ios_checked_devices = []
 
 
 
@@ -119,8 +128,8 @@ function load_apps() {
                      // button.onclick =  deleteapp;
                      cell.appendChild(button);
                    }else if (j == columnCount-1) {
-                     var button = document.createElement('input');
-                     button.setAttribute('type','button');
+                     var button = document.createElement('button');
+                     button.setAttribute('class','copy_button');
                      button.setAttribute('value', 'copy');
                      button.setAttribute('name','copy_button');
                      button.setAttribute('id', customers[i][j]);
@@ -138,6 +147,11 @@ function load_apps() {
            var dvTable = document.getElementById("xcui_table");
            dvTable.innerHTML = "";
            dvTable.appendChild(table);
+
+           x = document.querySelectorAll('.copy_button')
+           for (var i = 0; i < x.length; i++) {
+             x[i].innerHTML = '<img src ="assets/img/copy.png" ,alt="copy" style="height:10px;width:10px">'
+           }
 
 
   });
@@ -175,37 +189,221 @@ function copyappid(elementid) {
   clipboard.writeText(elementid);
 }
 
-// --------------- Change Accordion height --------------------//
 
-// function accordionHeight() {
-//   var acc = document.getElementsByClassName("accordion");
-// acc[0].classList.toggle("active");
-//   var panel = acc[0].nextElementSibling;
-//   panel.style.maxHeight = panel.scrollHeight + "px";
-//
-//   acc[0].classList.toggle("active");
-// }
 
-// --------------- Accordion Setup and Control --------------------//
-// var acc = document.getElementsByClassName("accordion");
-// var i;
-// for (i = 0; i < acc.length; i++) {
-//
-//   acc[i].classList.toggle("active");
-//   var panel = acc[i].nextElementSibling;
-//   if (panel.style.maxHeight) {
-//     panel.style.maxHeight = null;
-//   } else {
-//     panel.style.maxHeight = panel.scrollHeight + "px";
-//   }
-//
-//   acc[i].addEventListener("click", function() {
-//     this.classList.toggle("active");
-//     var panel = this.nextElementSibling;
-//     if (panel.style.maxHeight) {
-//       panel.style.maxHeight = null;
-//     } else {
-//       panel.style.maxHeight = panel.scrollHeight + "px";
-//     }
-//   });
-// }
+// --------------- Generate App Options List --------------------//
+xcui_app_options.addEventListener('click',(event) => {
+console.log("xcui_app");
+  var username=document.getElementById('username').value
+  var key=document.getElementById('accesskey').value
+  var options = {
+    method: 'GET',
+    url: 'https://'+username+':'+key+'@api-cloud.browserstack.com/app-automate/recent_apps'
+  };
+function callback(error, response, body) {
+    if (!error && response.statusCode == 200) {
+      xcui_app.innerHTML = ""
+
+      var options = document.createElement('option')
+      options.setAttribute("id","xcui-app-option1")
+      options.setAttribute("value","")
+      xcui_app.appendChild(options)
+      document.getElementById('xcui-app-option1').innerHTML = "Select App"
+        parsedbody = JSON.parse(body);
+        for(i=0;i<parsedbody.length;i++){
+          var options = document.createElement('option')
+          options.setAttribute("value",parsedbody[i].app_url)
+          options.setAttribute("id",parsedbody[i].app_url)
+
+          xcui_app.appendChild(options)
+          document.getElementById(parsedbody[i].app_url).innerHTML =parsedbody[i].app_name+"-"+parsedbody[i].app_version
+        }
+    }
+    else {
+      console.log("error");
+    }
+}
+
+request(options, callback);
+});
+
+// --------------- Generate Test App Options List --------------------//
+
+xcui_testapp_options.addEventListener('click',(event) => {
+  var username=document.getElementById('username').value
+  var key=document.getElementById('accesskey').value
+  var options = {
+    method: 'GET',
+    url: 'https://'+username+':'+key+'@api-cloud.browserstack.com/app-automate/xcuitest/test-suites'
+  };
+function callback(error, response, body) {
+    if (!error && response.statusCode == 200) {
+        parsedbody = JSON.parse(body);
+        xcui_test_app.innerHTML = ""
+        var options = document.createElement('option')
+        options.setAttribute("id","xcui-test-option1")
+        options.setAttribute("value","")
+        xcui_test_app.appendChild(options)
+        document.getElementById('xcui-test-option1').innerHTML = "Select Test"
+        for(i=0;i<parsedbody.length;i++){
+          var options = document.createElement('option')
+          options.setAttribute("value",parsedbody[i].test_suite_url)
+          options.setAttribute("id",parsedbody[i].test_suite_url)
+
+          xcui_test_app.appendChild(options)
+          document.getElementById(parsedbody[i].test_suite_url).innerHTML =parsedbody[i].test_suite_name
+        }
+    }
+    else {
+      console.log(response);
+    }
+}
+
+request(options, callback);
+});
+
+// --------------- Loading Apps in Dropdown --------------------//
+
+xcui_app.addEventListener("change", (event) => {
+xcui_curl_text(xcui_app.value,"app")
+});
+
+
+// --------------- Loading Test App in Dropdown  --------------------//
+
+xcui_test_app.addEventListener("change", (event) => {
+console.log("Changed the Test App");
+xcui_curl_text(xcui_test_app.value,"test")
+});
+
+
+// --------------- Generating code snippet --------------------//
+
+
+xcui_copy.addEventListener('click',(event) => {
+
+  clipboard.writeText(document.getElementById('xcui-curl-textarea').value)
+  console.log("copied");
+});
+
+// --------------- Generating code snippet --------------------//
+
+function xcui_curl_text(string,variable) {
+  var username=document.getElementById('username').value
+  var key=document.getElementById('accesskey').value
+  switch (variable) {
+    case 'app':
+      app = string
+      break;
+    case 'test':
+    test = string
+    break;
+    case 'device':
+      device = string
+    break;
+    default:
+    break;
+
+  }
+  document.getElementById('xcui-curl-textarea').value = 'curl -X POST "https://api-cloud.browserstack.com/app-automate/xcuitest/build" -d \\ "{\\"devices\\": ['+device+'], \\"app\\": \\"'+app+'\\", \\"deviceLogs\\" : true, \\"testSuite\\": \\"'+test+'\\"}" -H "Content-Type: application/json" -u "'+username+':'+key+'"'
+}
+
+
+
+
+// --------------- OnChange for Device function --------------------//
+function device_change(elem) {
+  // console.log(elem.id);
+  var x = document.querySelectorAll('.xcui-devices')
+  ios_checked_devices = []
+  for (var i = 0; i < x.length; i++) {
+
+    if (x[i].checked) {
+      ios_checked_devices.push(x[i].id)
+    }
+  }
+
+  device_string(ios_checked_devices);
+
+}
+
+// --------------- changing device array to stirng --------------------//
+
+function device_string(ios_checked_devices){
+var data = "";
+  for (i = 0 ; i<ios_checked_devices.length;i++){
+    if(i == ios_checked_devices.length-1){
+      data += '\\"'+ios_checked_devices[i]+'\\"'
+    }
+    else{
+        data += '\\"'+ios_checked_devices[i]+'\\",'
+    }
+
+  }
+  xcui_curl_text(data,'device');
+  // console.log(data);
+
+}
+
+
+
+// --------------- Generating android List --------------------//
+function ios_device_list() {
+  var username=document.getElementById('username').value
+  var key=document.getElementById('accesskey').value
+
+  var options = {
+    url: 'https://'+username+':'+key+'@api-cloud.browserstack.com/app-automate/devices.json',
+};
+
+function callback(error, response, body) {
+    if (!error && response.statusCode == 200) {
+
+
+        // console.log(body);
+
+        parsedbody = JSON.parse(body);
+        var device_div = document.getElementById('xcui-device-list');
+        for(i=0; i<parsedbody.length;i++){
+          if(parsedbody[i].os=='ios'){
+            var select = document.createElement('input')
+            select.setAttribute("type","checkbox");
+            select.setAttribute("class","xcui-devices");
+            select.setAttribute("name",parsedbody[i].device+"-"+parsedbody[i].os_version);
+            select.setAttribute("id",parsedbody[i].device+"-"+parsedbody[i].os_version);
+            select.setAttribute("value",parsedbody[i].device+"-"+parsedbody[i].os_version);
+            select.addEventListener('change',function(){
+              device_change(this);
+            });
+            var label = document.createElement('label')
+            label.setAttribute("for",parsedbody[i].device+"-"+parsedbody[i].os_version);
+            label.setAttribute("id",parsedbody[i].device+"-"+parsedbody[i].os_version+"label");
+
+
+
+            // var device_div = document.getElementById('xcui-device-list');
+            device_div.appendChild(select);
+            device_div.appendChild(label);
+            var br = document.createElement('br');
+            device_div.appendChild(br);
+            document.getElementById(parsedbody[i].device+"-"+parsedbody[i].os_version+"label").innerHTML = parsedbody[i].device+"-"+parsedbody[i].os_version
+            // console.log(parsedbody[i].device+"-"+parsedbody[i].os_version);
+
+          }
+
+
+        }
+    }
+}
+
+request(options, callback);
+
+}
+
+xcui_curl_text();
+document.getElementById('xcui-refresh-device').addEventListener('click',(event) =>{
+  console.log("here");
+  document.getElementById('xcui-device-list').innerHTML=""
+  ios_device_list();
+
+});
