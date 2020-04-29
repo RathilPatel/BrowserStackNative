@@ -113,8 +113,8 @@ function load_apps() {
                for (var j = 0; j < columnCount; j++) {
                    var cell = row.insertCell(-1);
                    if(j == columnCount-2){
-                     var button = document.createElement('input');
-                     button.setAttribute('type', 'button');
+                     var button = document.createElement('button');
+                     button.setAttribute('class', 'delete_button');
                      button.setAttribute('value', 'Delete');
                      button.setAttribute('name','delete_button');
                      button.setAttribute('id', customers[i][j]);
@@ -146,7 +146,11 @@ function load_apps() {
 
            x = document.querySelectorAll('.copy_button')
            for (var i = 0; i < x.length; i++) {
-             x[i].innerHTML = '<img src ="assets/img/copy.png" ,alt="copy" style="height:10px;width:10px">'
+             x[i].innerHTML = '<img src ="assets/img/copy.png" ,alt="copy" class="icon">'
+           }
+           x = document.querySelectorAll('.delete_button')
+           for (var i = 0; i < x.length; i++) {
+             x[i].innerHTML = '<img src ="assets/img/trash.png" ,alt="delete" class="icon">'
            }
   });
 
@@ -359,15 +363,15 @@ function callback(error, response, body) {
             var select = document.createElement('input')
             select.setAttribute("type","checkbox");
             select.setAttribute("class","earlgrey-devices");
-            select.setAttribute("name",parsedbody[i].device+"-"+parsedbody[i].os_version);
+            select.setAttribute("name","earlgrey-"+parsedbody[i].device+"-"+parsedbody[i].os_version);
             select.setAttribute("id",parsedbody[i].device+"-"+parsedbody[i].os_version);
             select.setAttribute("value",parsedbody[i].device+"-"+parsedbody[i].os_version);
             select.addEventListener('change',function(){
               device_change(this);
             });
             var label = document.createElement('label')
-            label.setAttribute("for",parsedbody[i].device+"-"+parsedbody[i].os_version);
-            label.setAttribute("id",parsedbody[i].device+"-"+parsedbody[i].os_version+"label");
+            label.setAttribute("for","earlgrey-"+parsedbody[i].device+"-"+parsedbody[i].os_version);
+            label.setAttribute("id","earlgrey-"+parsedbody[i].device+"-"+parsedbody[i].os_version+"label");
 
 
 
@@ -376,7 +380,7 @@ function callback(error, response, body) {
             device_div.appendChild(label);
             var br = document.createElement('br');
             device_div.appendChild(br);
-            document.getElementById(parsedbody[i].device+"-"+parsedbody[i].os_version+"label").innerHTML = parsedbody[i].device+"-"+parsedbody[i].os_version
+            document.getElementById("earlgrey-"+parsedbody[i].device+"-"+parsedbody[i].os_version+"label").innerHTML = parsedbody[i].device+"-"+parsedbody[i].os_version
             // console.log(parsedbody[i].device+"-"+parsedbody[i].os_version);
 
           }
