@@ -1,4 +1,6 @@
 const {shell} = require('electron')
+const Store = require('electron-store');
+const store = new Store();
 const os = require('os')
 var request = require('request');
 var username=document.getElementById('username').value
@@ -57,5 +59,30 @@ request(options, callback);
 
 }
 
+
+document.getElementById('set_cred').addEventListener('click',(event) => {
+  store.set('username',  document.getElementById('username').value);
+  store.set('accesskey',  document.getElementById('accesskey').value)
+});
+
+function get_cred() {
+user = store.get('username');
+key = store.get('accesskey');
+if(key && user ){
+  document.getElementById('username').value = store.get('username');
+  document.getElementById('accesskey').value = store.get('accesskey');
+}
+
+
+}
+
+document.getElementById('clear_cred').addEventListener('click',(event) =>{
+  console.log(store.delete('username'));
+  console.log(store.delete('accesskey'));
+  document.getElementById('username').value = ""
+  document.getElementById('accesskey').value = ""
+
+});
+get_cred();
 // load_automate_plan();
 // load_app_automate_plan();
