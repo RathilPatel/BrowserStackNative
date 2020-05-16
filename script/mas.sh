@@ -3,7 +3,7 @@
 set -ex
 
 # App Store does not allow the word "demos" in the app's name
-APP="BStack"
+APP="BrowserStackNative"
 
 electron-packager . \
   "$APP" \
