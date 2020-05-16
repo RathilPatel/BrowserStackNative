@@ -106,8 +106,8 @@ function load_apps() {
                for (var j = 0; j < columnCount; j++) {
                    var cell = row.insertCell(-1);
                    if(j == columnCount-2){
-                     var button = document.createElement('input');
-                     button.setAttribute('type', 'button');
+                     var button = document.createElement('button');
+                     button.setAttribute('class', 'delete_button');
                      button.setAttribute('value', 'Delete');
                      button.setAttribute('name','delete_button');
                      button.setAttribute('id', customers[i][j]);
@@ -117,8 +117,8 @@ function load_apps() {
                      button.onclick =  deleteapp;
                      cell.appendChild(button);
                    }else if (j == columnCount-1) {
-                     var button = document.createElement('input');
-                     button.setAttribute('type','button');
+                     var button = document.createElement('button');
+                     button.setAttribute('class','copy_button');
                      button.setAttribute('value', 'copy');
                      button.setAttribute('name','copy_button');
                      button.setAttribute('id', customers[i][j]);
@@ -136,6 +136,16 @@ function load_apps() {
            var dvTable = document.getElementById("app_table");
            dvTable.innerHTML = "";
            dvTable.appendChild(table);
+
+           x = document.querySelectorAll('.copy_button')
+           for (var i = 0; i < x.length; i++) {
+             x[i].innerHTML = '<img src ="assets/img/copy.png" ,alt="copy" class="icon">'
+           }
+
+           x = document.querySelectorAll('.delete_button')
+           for (var i = 0; i < x.length; i++) {
+             x[i].innerHTML = '<img src ="assets/img/trash.png" ,alt="delete" class="icon">'
+           }
 
    ///////////////////////////////////////////////////
 
