@@ -306,6 +306,14 @@ function xcui_curl_text(string,variable) {
     case 'device':
       device = string
     break;
+    case 'run':
+    if(!app || !test || !device){
+      console.log("MIssing either app/test/device");
+    }
+    else{
+      console.log("call running function: App="+app+" Test:"+test+" Device:"+device);
+      running_xcui(app,test,device)
+    }
     default:
     break;
 
@@ -412,3 +420,44 @@ document.getElementById('xcui-refresh-device').addEventListener('click',(event) 
   ios_device_list();
 
 });
+
+
+document.getElementById('run_xcui').addEventListener('click',(event)=>{
+  xcui_curl_text('dummy','run')
+});
+
+function running_xcui(app,test,device) {
+  var username=document.getElementById('username').value
+  var key=document.getElementById('accesskey').value
+
+while (device.includes("\\\"")) {
+  device = device.replace("\\\"","\"")
+}
+
+  var headers = {
+      'Content-Type': 'application/json'
+    };
+    var dataString = '{"devices": ['+device+'], "app": "'+app+'", "deviceLogs" : true, "testSuite": "'+test+'"}';
+console.log(dataString);
+    var options = {
+      url: 'https://'+username+':'+key+'@api-cloud.browserstack.com/app-automate/xcuitest/build',
+      method: 'POST',
+      headers: headers,
+      body: dataString
+    };
+
+    function callback(error, response, body) {
+      if (!error && response.statusCode == 200) {
+          console.log(body);
+          // console.log(error);
+          // console.log(response);
+      }
+      else {
+        console.log(error);
+        console.log(response);
+      }
+    }
+
+    request(options, callback);
+
+}

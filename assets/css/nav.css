@@ -4,7 +4,7 @@
   width: 340px;
   overflow-x: hidden;
   overflow-y: auto;
-  color: var(--color-subtle);
+  color: var(--color-white);
   border-right: 1px solid var(--color-border);
   background-color: var(--color-bg);
   visibility: hidden;
@@ -12,7 +12,7 @@
 }
 .nav.is-shown {
   visibility: visible;;
-  opacity: 1;
+  opacity: 1; 
 }
 
 .nav-header {
@@ -31,7 +31,7 @@
 
 .nav-title strong {
   font-weight: 600;
-  color: var(--color-strong);
+  color: var(--color-white);
 }
 
 .nav-header-icon {
@@ -83,7 +83,7 @@
   background-color: hsla(0,0%,0%,.1);
 }
 .nav-button.is-selected {
-  background-color: var(--color-accent);
+  background-color: var(--color-subtle);
 }
 .nav-button.is-selected,
 .nav-button.is-selected em {

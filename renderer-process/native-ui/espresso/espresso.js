@@ -303,6 +303,14 @@ function espresso_curl_text(string,variable) {
     case 'device':
       device = string
     break;
+    case 'run':
+      if(!app || !test || !device){
+        console.log("MIssing either app/test/device");
+      }
+      else{
+        console.log("call running function: App="+app+" Test:"+test+" Device:"+device);
+        running_espresso(app,test,device)
+      }
     default:
     break;
 
@@ -402,6 +410,8 @@ request(options, callback);
 
 }
 
+
+
 espresso_curl_text();
 document.getElementById('refresh-device').addEventListener('click',(event) =>{
   console.log("here");
@@ -409,3 +419,45 @@ document.getElementById('refresh-device').addEventListener('click',(event) =>{
   android_device_list();
 
 });
+
+
+
+document.getElementById('run_espresso').addEventListener('click',(event)=>{
+  espresso_curl_text('dummy','run')
+});
+
+function running_espresso(app,test,device) {
+  var username=document.getElementById('username').value
+  var key=document.getElementById('accesskey').value
+
+while (device.includes("\\\"")) {
+  device = device.replace("\\\"","\"")
+}
+
+  var headers = {
+      'Content-Type': 'application/json'
+    };
+    var dataString = '{"devices": ['+device+'], "app": "bs://'+app+'", "deviceLogs" : true, "testSuite": "bs://'+test+'"}';
+console.log(dataString);
+    var options = {
+      url: 'https://'+username+':'+key+'@api-cloud.browserstack.com/app-automate/espresso/build',
+      method: 'POST',
+      headers: headers,
+      body: dataString
+    };
+
+    function callback(error, response, body) {
+      if (!error && response.statusCode == 200) {
+          console.log(body);
+          // console.log(error);
+          // console.log(response);
+      }
+      else {
+        console.log(error);
+        console.log(response);
+      }
+    }
+
+    request(options, callback);
+
+}

@@ -11,7 +11,7 @@ const fileManagerBtn = document.getElementById('open-file-manager')
 // fileManagerBtn.addEventListener('click', (event) => {
 //   shell.showItemInFolder(os.homedir())
 // })
-console.log("testing with Credentials Page");
+console.log("Hello Credentials Page");
 
 function load_automate_plan() {
 //Automate plan here
@@ -61,8 +61,12 @@ request(options, callback);
 
 
 document.getElementById('set_cred').addEventListener('click',(event) => {
+  console.log("here");
+  // setTimeout(credentials_messages, 3000);
   store.set('username',  document.getElementById('username').value);
   store.set('accesskey',  document.getElementById('accesskey').value)
+  credentials_messages('Info',"Values Set","credentials_messages")
+
 });
 
 function get_cred() {
@@ -86,3 +90,8 @@ document.getElementById('clear_cred').addEventListener('click',(event) =>{
 get_cred();
 // load_automate_plan();
 // load_app_automate_plan();
+
+function credentials_messages(type,message,span) {
+  document.getElementById(span).innerHTML = '<div class="info-msg"><i class="fa fa-info-circle"></i>'+message+'</div>'
+}
+// credentials_messages();

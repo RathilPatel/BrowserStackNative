@@ -10,6 +10,7 @@
           BrowserStack Local
         </h1>
         <h3>Enter your BrowserStack username and access key</h3>
+        <span id="local_messages"></span>
 
         <!-- <p>Get your BrowserStack username and acccess key from <a href="https://www.browserstack.com/accounts/settings">here<span class="u-visible-to-screen-reader">(opens in new window)</span></a></p> -->
         <!-- Additional Flags(optional)<br> -->
@@ -47,23 +48,35 @@
 <input type="checkbox" name="forcelocal" id="forcelocal" value="forcelocal">--parallel-run: <input type="text" name="" value="" disabled>
 <input type="checkbox" name="forcelocal" id="forcelocal" value="forcelocal">--https-ports: <input type="text" name="" value="" disabled>
         <p><strong>Support for more Flags coming soon!!</strong></p> -->
-        <!-- <p id="local_status">LocalTesting: Not Running</p> -->
+        <p id="local_status">LocalTesting: Not Running</p>
         <input id='start-local' type="button" value="Start Local" >
         <input id='stop-local' type="button"  value="Stop Local" >
+        <!-- <div class="button" id="start-local">
+        <div class="eff-8"></div>
+          <a href="#" >Start Local</a>
+        </div>
+        <div class="button" id="stop-local">
+        <div class="eff-8"></div>
+          <a href="#" >Stop Local</a>
+        </div> -->
+        <br>
+        <p>Console :</p>
+        <div class="" id="local_div" style="width:100%;height:150px;overflow-x:auto;background-color:hsl(0, 0%, 95%)">
+          <p name="" id="local_output"> </p>
+
+        </div>
+        <!-- <input type="textarea" name="" id="local_output" value="" disabled style="width:100%;height:50px;overflow-x:auto"> -->
         <hr>
       </div>
-
-
-
 
 
     </header>
 
 
-
-
     <script type="text/javascript">
+      require('./renderer-process/native-ui/ex-links-file-manager/file-manager')
       require('./renderer-process/native-ui/local/local');
+      // require('./renderer-process/native-ui/ex-links-file-manager/file-manager');
     </script>
   </section>
 </template>

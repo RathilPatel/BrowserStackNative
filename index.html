@@ -35,7 +35,7 @@
   <nav class="nav js-nav">
       <header class="nav-header">
         <h1 class="nav-title">BrowserStack <strong>Native</strong></h1>
-        <svg class="nav-header-icon"><use xlink:href="assets/img/icons.svg#icon-electron"></use></svg>
+        <img class="nav-header-icon" src="assets/app-icon/png/1024.png" alt="">
       </header>
       <div class="nav-item u-category-native-ui">
         <h5 class="nav-category">
@@ -44,13 +44,7 @@
           <button type="button" id="button-credentials" data-section="credentials" class="nav-button">Credentials</button>
         <!-- <button type="button" id="button-about" data-section="capabilities"class="nav-button">Capabilities</button> -->
       </div>
-      <!-- <div class="nav-item u-category-native-ui">
-        <h5 class="nav-category">
-          <svg class="nav-icon"><use xlink:href="assets/img/icons.svg#icon-native-ui"></use></svg>
-          Record and Playback</h5>
-          <button type="button" id="button-ex-links-file-manager" data-modal="about" class="nav-button">Overview</button>
-          <button type="button" id="button-ex-links-file-manager" data-section="ex-links-file-manager" class="nav-button">Run Test on BrowserStack</button>
-      </div> -->
+
       <div class="nav-item u-category-native-ui">
         <h5 class="nav-category">
           <svg class="nav-icon"><use xlink:href="assets/img/icons.svg#icon-native-ui"></use></svg>
@@ -64,36 +58,18 @@
           App-Live</h5>
 
         <button type="button" id="button-ex-links-file-manager" data-section="app-live" class="nav-button">Manage Apps</button>
-        <!-- <button type="button" id="button-ex-links-file-manager" data-section="app-automate" class="nav-button">Automation</button> -->
-        <!-- <button type="button" id="button-ex-links-file-manager" data-section="ex-links-file-manager" class="nav-button">Delete App</button> -->
       </div>
       <div class="nav-item u-category-native-ui">
         <h5 class="nav-category">
           <svg class="nav-icon"><use xlink:href="assets/img/icons.svg#icon-native-ui"></use></svg>
           App-Automate</h5>
 
-        <!-- <button type="button" id="button-ex-links-file-manager" data-section="app-live" class="nav-button">Manual</button> -->
-        <button type="button" id="button-ex-links-file-manager" data-section="app-automate" class="nav-button">Manage App</button>
+        <button type="button" id="button-ex-links-file-manager" data-section="app-automate" class="nav-button">Manage Apps</button>
         <button type="button" id="button-ex-links-file-manager" data-section="espresso-test" class="nav-button">Run Espresso Test</button>
         <button type="button" id="button-ex-links-file-manager" data-section="xcui-test" class="nav-button">Run XCUI Test</button>
         <button type="button" id="button-ex-links-file-manager" data-section="earlgrey-test" class="nav-button">Run EarlGrey Test</button>
-
-        <!-- <button type="button" id="button-ex-links-file-manager" data-section="ex-links-file-manager" class="nav-button">Delete App</button> -->
       </div>
-      <!-- <div class="nav-item u-category-native-ui">
-        <h5 class="nav-category">
-          <svg class="nav-icon"><use xlink:href="assets/img/icons.svg#icon-native-ui"></use></svg>
-          Manual Testing</h5>
-        <button type="button" id="button-ex-links-file-manager" data-section="ex-links-file-manager" class="nav-button">Live(Test Web Apps)</button>
-        <button type="button" id="button-ex-links-file-manager" data-section="ex-links-file-manager" class="nav-button">App Live(Test Mobile Apps)</button>
-      </div> -->
-      <!-- <div class="nav-item u-category-native-ui">
-        <h5 class="nav-category">
-          <svg class="nav-icon"><use xlink:href="assets/img/icons.svg#icon-native-ui"></use></svg>
-          Logs(Automate/App-Automate)</h5>
-        <button type="button" id="button-ex-links-file-manager" data-section="ex-links-file-manager" class="nav-button">Console Logs</button>
-        <button type="button" id="button-ex-links-file-manager" data-section="ex-links-file-manager" class="nav-button">Network Logs</button>
-      </div> -->
+
       <footer class="nav-footer">
         <!-- <button type="button" id="button-about" data-modal="about" class="nav-footer-button">About</button> -->
         <!-- <a class="nav-footer-logo" href="https://github.com" aria-label="Homepage"> -->
@@ -111,6 +87,7 @@
     require('./assets/demo-btns')
     require('./assets/code-blocks')
     require('./assets/normalize-shortcuts')
+    require('./renderer-process/native-ui/ex-links-file-manager/file-manager')
     // require('./renderer-process/native-ui/local/local')
     // require('./renderer-process/native-ui/ex-links-file-manager/uploadautomate')
     // require('./renderer-process/native-ui/espresso/espresso')
