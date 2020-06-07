@@ -62,10 +62,16 @@ request(options, callback);
 
 document.getElementById('set_cred').addEventListener('click',(event) => {
   console.log("here");
-  // setTimeout(credentials_messages, 3000);
+if (document.getElementById('username').value=='' || document.getElementById('accesskey').value=='') {
+
+   credentials_messages('error',"Username/Accesskey values cannot be null","credentials_messages",5)
+
+}
+else {
   store.set('username',  document.getElementById('username').value);
-  store.set('accesskey',  document.getElementById('accesskey').value)
-  credentials_messages('Info',"Values Set","credentials_messages")
+   store.set('accesskey',  document.getElementById('accesskey').value)
+   credentials_messages('info',"Credentials Saved","credentials_messages",5)
+}
 
 });
 
@@ -81,17 +87,51 @@ if(key && user ){
 }
 
 document.getElementById('clear_cred').addEventListener('click',(event) =>{
+  if(store.get('username')==null && store.get('accesskey')==null){
+    credentials_messages('info',"Credentials not saved ","credentials_messages",5)
+  }
+  else{
+    credentials_messages('info',"Credentials cleared ","credentials_messages",5)
+
+  }
   console.log(store.delete('username'));
   console.log(store.delete('accesskey'));
   document.getElementById('username').value = ""
   document.getElementById('accesskey').value = ""
+
 
 });
 get_cred();
 // load_automate_plan();
 // load_app_automate_plan();
 
-function credentials_messages(type,message,span) {
-  document.getElementById(span).innerHTML = '<div class="info-msg"><i class="fa fa-info-circle"></i>'+message+'</div>'
+function credentials_messages(type,message,span,timeout) {
+  switch (type){
+    case 'info':
+      document.getElementById(span).innerHTML = '<div class="info-msg"><i class="fa fa-info-circle"></i>'+message+'</div>'
+      if(timeout!=0){
+                setTimeout(remove_message,timeout*1000,span)
+      }
+      break;
+    case 'error':
+      document.getElementById(span).innerHTML = '<div class="error-msg"><i class="fa fa-times-circle"></i>'+message+'</div>'
+      if(timeout!=0){
+                setTimeout(remove_message,timeout*1000,span)
+      }      break;
+    case 'success':
+    document.getElementById(span).innerHTML = '<div class="success-msg"><i class="fa fa-check"></i>'+message+'</div>'
+    if(timeout!=0){
+              setTimeout(remove_message,timeout*1000,span)
+    }      break;
+    default:
+
+  }
 }
+function remove_message(span){
+  console.log("removing message from here  :"+span);
+  document.getElementById(span).innerHTML = ''
+
+
+}
+window.credentials_messages = credentials_messages;
 // credentials_messages();

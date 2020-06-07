@@ -15,8 +15,12 @@ var url = 'http://localhost:45454'
 
 
 startlocal.addEventListener('click', (event) => {
-
-
+  var username=document.getElementById('username').value
+  var key=document.getElementById('accesskey').value
+  if(!username || !key){
+    credentials_messages('error','Username/Accesskey not set on Credentials Page','local_messages',10)
+  }
+  else{
     if(document.getElementById('local_status').innerHTML == 'LocalTesting: Not Running'){
       hostOS = process.platform;
       is64bits = process.arch == 'x64';
@@ -29,6 +33,12 @@ startlocal.addEventListener('click', (event) => {
             document.getElementById('local_output').innerHTML = logs+"<br>"+data;
             console.log(`data: ${data}`);
             updateScroll();
+            if(data.includes("[SUCCESS] You can now access your local server(s) in our remote browser")){
+              credentials_messages("success","Binary Started Visit http://localhost:45454 for Advance settings","local_messages",0);
+            }
+            else{
+              console.log('not started running yet!!');
+            }
           });
           local_process.stderr.on('data',(err) => {
             logs = document.getElementById('local_output').innerHTML;
@@ -36,12 +46,14 @@ startlocal.addEventListener('click', (event) => {
             console.log(`error: ${err}`);
             updateScroll();
             document.getElementById('local_status').innerHTML = 'LocalTesting: Not Running';
+            credentials_messages("error","Error Starting Binary kindly refer the logs below","local_messages",15);
+
 
           });
 
           console.log("Process Id for local: "+local_process.pid);
-          document.getElementById('local_status').innerHTML = 'LocalTesting: Running - Starting configuration console on http://localhost:45454';
-          // credentials_messages("success","Binary Started","local_messages");
+          document.getElementById('local_status').innerHTML = 'LocalTesting: Running';
+          credentials_messages("success","Starting Binary......","local_messages",0);
       }
       else if(hostOS.match(/mswin|msys|mingw|cygwin|bccwin|wince|emc|win32/i)) {
         console.log("Windows");
@@ -50,6 +62,7 @@ startlocal.addEventListener('click', (event) => {
           console.log("Error: Only mac and windows supported right now");
       }
     }
+  }
 });
 
 stoplocal.addEventListener('click', (event) => {
@@ -62,6 +75,12 @@ stoplocal.addEventListener('click', (event) => {
       console.log(`error: ${err}`);
     });
     document.getElementById('local_status').innerHTML = 'LocalTesting: Not Running';
+    credentials_messages("success","Binary Stopped","local_messages",5);
+
+
+}
+else {
+  credentials_messages("info","Binary not Running","local_messages",5);
 
 }
 

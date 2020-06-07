@@ -29,6 +29,14 @@ function execute(command, callback) {
 upload.addEventListener('click', (event) => {
   var username=document.getElementById('username').value
   var key=document.getElementById('accesskey').value
+  if(!username || !key){
+    credentials_messages('error','Username/Accesskey not set on Credentials Page','earlgrey_messages',10)
+  }
+  else if (!document.getElementById('earlgreyfile').files[0]) {
+    credentials_messages('error','Select a app','earlgrey_messages',10)
+
+  }
+  else {
   const filepath=document.getElementById('earlgreyfile').files[0].path
   document.getElementById('earlgrey-loader').removeAttribute("hidden");
   document.getElementById('earlgreystatus').setAttribute("hidden","true");
@@ -59,13 +67,29 @@ upload.addEventListener('click', (event) => {
 
 
   request(options, function (error, response, body) {
-    if (error) throw new Error(error);
-    console.log(body);
-    autostatus.innerHTML=body;
-    document.getElementById('earlgrey-loader').setAttribute("hidden",true);
-    document.getElementById('earlgreystatus').removeAttribute("hidden");
+    if(response.statusCode == 200){
+      if (error) throw new Error(error);
+      console.log(body);
+      autostatus.innerHTML=body;
+      document.getElementById('earlgrey-loader').setAttribute("hidden",true);
+      document.getElementById('earlgreystatus').removeAttribute("hidden");
+      credentials_messages('success','EarlGrey Test Uploaded','earlgrey_messages',10)
+
+    }
+    else if (response.statusCode == 401) {
+      credentials_messages('error','Error 401: Unauthorized','earlgrey_messages',10)
+      document.getElementById('earlgrey-loader').setAttribute("hidden",true);
+      document.getElementById('earlgreystatus').removeAttribute("hidden");
+
+    }else {
+      credentials_messages('error','Error '+response.statusCode+': '+response.statusText,'earlgrey_messages',10)
+      document.getElementById('earlgrey-loader').setAttribute("hidden",true);
+      document.getElementById('earlgreystatus').removeAttribute("hidden");
+    }
+
 
   });
+}
 });
 
 // --------------- Get Recent Upload on EarlGrey  --------------------//
@@ -73,12 +97,17 @@ upload.addEventListener('click', (event) => {
 function load_apps() {
   var username=document.getElementById('username').value
   var key=document.getElementById('accesskey').value
+  if(!username || !key){
+    credentials_messages('error','Username/Accesskey not set on Credentials Page','earlgrey_messages',10)
+  }
+  else{
   var options = {
     method: 'GET',
     url: 'https://'+username+':'+key+'@api-cloud.browserstack.com/app-automate/earlgrey/app-dirs',
   };
 
   request(options, function (error, response, body) {
+    if(response.statusCode == 200){
     if (error) throw new Error(error);
 
   var customers = new Array();
@@ -152,8 +181,15 @@ function load_apps() {
            for (var i = 0; i < x.length; i++) {
              x[i].innerHTML = '<img src ="assets/img/trash.png" ,alt="delete" class="icon">'
            }
-  });
+         }
+                      else if (response.statusCode == 401) {
+                        credentials_messages('error','Error 401: Unauthorized','earlgrey_messages',10)
 
+                      }else {
+                        credentials_messages('error','Error '+response.statusCode+': '+response.statusText,'earlgrey_messages',10)
+                      }
+  });
+}
 }
 
 
@@ -164,6 +200,12 @@ function load_apps() {
 function deleteapp(element) {
   var username=document.getElementById('username').value
   var key=document.getElementById('accesskey').value
+  if(!username || !key){
+    credentials_messages('error','Username/Accesskey not set on Credentials Page','earlgrey_messages',10)
+  }
+  else{
+
+
   console.log(element);
   var options = {
     url: 'https://'+username+':'+key+'@api-cloud.browserstack.com/app-automate/earlgrey/app-dirs/'+element,
@@ -174,11 +216,20 @@ function callback(error, response, body) {
     if (!error && response.statusCode == 200) {
         console.log(body);
         load_apps();
+        credentials_messages('success','App Delete Successfull','earlgrey_messages',10)
+
+    }
+    else if (response.statusCode == 401) {
+      credentials_messages('error','Error 401: Unauthorized','earlgrey_messages',10)
+
+    }else {
+      credentials_messages('error','Error '+response.statusCode+': '+response.statusText,'earlgrey_messages',10)
     }
 
 }
 request(options, callback);
 load_apps();
+}
 }
 
 // --------------- Copy dir id --------------------//
@@ -186,6 +237,8 @@ load_apps();
 function copyappid(elementid) {
   console.log(elementid);
   clipboard.writeText(elementid);
+  credentials_messages('info','Copied','earlgrey_messages',3)
+
 }
 
 
@@ -193,6 +246,10 @@ function copyappid(elementid) {
 earlgrey_app_options.addEventListener('click',(event) => {
   var username=document.getElementById('username').value
   var key=document.getElementById('accesskey').value
+  if(!username || !key){
+    credentials_messages('error','Username/Accesskey not set on Credentials Page','earlgrey_messages',10)
+  }
+  else{
   var options = {
     method: 'GET',
     url: 'https://'+username+':'+key+'@api-cloud.browserstack.com/app-automate/earlgrey/app-dirs'
@@ -216,12 +273,16 @@ function callback(error, response, body) {
           document.getElementById(parsedbody[i].app_dir_url).innerHTML =parsedbody[i].app_dir_name
         }
     }
-    else {
-      console.log(response);
+    else if (response.statusCode == 401) {
+      credentials_messages('error','Error 401: Unauthorized','earlgrey_messages',10)
+
+    }else {
+      credentials_messages('error','Error '+response.statusCode+': '+response.statusText,'earlgrey_messages',10)
     }
 }
 
 request(options, callback);
+}
 });
 
 // --------------- Generate Test App Options List --------------------//
@@ -281,6 +342,8 @@ earlgrey_copy.addEventListener('click',(event) => {
 
   clipboard.writeText(document.getElementById('earlgrey-curl-textarea').value)
   console.log("copied");
+  credentials_messages('info','Copied','earlgrey_messages',3)
+
 });
 
 // --------------- Generating code snippet --------------------//
@@ -297,7 +360,7 @@ function earlgrey_curl_text(string,variable) {
     break;
     case 'run':
     if(!app || !device){
-      console.log("MIssing either app/test/device");
+      credentials_messages('error','Select valid Device/app/Test','earlgrey_messages',10)
     }
     else{
       console.log("call running function: App="+app+" Device:"+device);
@@ -353,14 +416,16 @@ var data = "";
 function ios_device_list() {
   var username=document.getElementById('username').value
   var key=document.getElementById('accesskey').value
-
+  if(!username || !key){
+    credentials_messages('error','Username/Accesskey not set on Credentials Page','earlgrey_messages',10)
+  }
+  else{
   var options = {
     url: 'https://'+username+':'+key+'@api-cloud.browserstack.com/app-automate/devices.json',
 };
 
 function callback(error, response, body) {
     if (!error && response.statusCode == 200) {
-
 
         // console.log(body);
 
@@ -382,7 +447,6 @@ function callback(error, response, body) {
             label.setAttribute("id","earlgrey-"+parsedbody[i].device+"-"+parsedbody[i].os_version+"label");
 
 
-
             // var device_div = document.getElementById('earlgrey-device-list');
             device_div.appendChild(select);
             device_div.appendChild(label);
@@ -396,10 +460,17 @@ function callback(error, response, body) {
 
         }
     }
+    else if (response.statusCode == 401) {
+      credentials_messages('error','Error 401: Unauthorized','earlgrey_messages',10)
+
+    }else {
+      credentials_messages('error','Error '+response.statusCode+': '+response.statusText,'earlgrey_messages',10)
+    }
+
 }
 
 request(options, callback);
-
+}
 }
 
 earlgrey_curl_text();
@@ -418,7 +489,10 @@ document.getElementById('run_earlgrey').addEventListener('click',(event)=>{
 function running_earlgrey(app,device) {
   var username=document.getElementById('username').value
   var key=document.getElementById('accesskey').value
-
+  if(!username || !key){
+    credentials_messages('error','Username/Accesskey not set on Credentials Page','earlgrey_messages',10)
+  }
+  else{
 while (device.includes("\\\"")) {
   device = device.replace("\\\"","\"")
 }
@@ -436,17 +510,19 @@ console.log(dataString);
     };
 
     function callback(error, response, body) {
-      if (!error && response.statusCode == 200) {
-          console.log(body);
-          // console.log(error);
-          // console.log(response);
+      if(response.statusCode == 200){
+        credentials_messages('success','Test Launched','earlgrey_messages',10)
+
       }
-      else {
-        console.log(error);
-        console.log(response);
+      else if (response.statusCode == 401) {
+        credentials_messages('error','Error 401: Unauthorized','earlgrey_messages',10)
+
+      }else {
+        credentials_messages('error','Error '+response.statusCode+': '+response.statusText,'earlgrey_messages',10)
       }
+
     }
 
     request(options, callback);
-
+}
 }

@@ -32,44 +32,67 @@ function execute(command, callback) {
 upload.addEventListener('click', (event) => {
   var username=document.getElementById('username').value
   var key=document.getElementById('accesskey').value
-  const filepath=document.getElementById('espressofile').files[0].path
-  document.getElementById('espresso-loader').removeAttribute("hidden");
-  document.getElementById('espressostatus').setAttribute("hidden","true");
-  if(!document.getElementById('espresso_custom_id').value){
-    console.log("no cusotm_id");
-    var options = {
-      method: 'POST',
-      url: 'https://'+username+':'+key+'@api-cloud.browserstack.com/app-automate/espresso/test-suite',
-      formData: {
-        file: fs.createReadStream(filepath)
-      }
-    };
+  if(!username || !key){
+    credentials_messages('error','Username/Accesskey not set on Credentials Page','espresso_messages',10)
+  }
+  else if (!document.getElementById('espressofile').files[0]) {
+    credentials_messages('error','Select a app','espresso_messages',10)
 
   }
   else {
-      console.log("cusotm_id");
+    const filepath=document.getElementById('espressofile').files[0].path
+    document.getElementById('espresso-loader').removeAttribute("hidden");
+    document.getElementById('espressostatus').setAttribute("hidden","true");
+    if(!document.getElementById('espresso_custom_id').value){
+      console.log("no cusotm_id");
       var options = {
         method: 'POST',
         url: 'https://'+username+':'+key+'@api-cloud.browserstack.com/app-automate/espresso/test-suite',
         formData: {
-          file: fs.createReadStream(filepath),
-          custom_id: document.getElementById('espresso_custom_id').value
+          file: fs.createReadStream(filepath)
         }
       };
 
+    }
+    else {
+        console.log("cusotm_id");
+        var options = {
+          method: 'POST',
+          url: 'https://'+username+':'+key+'@api-cloud.browserstack.com/app-automate/espresso/test-suite',
+          formData: {
+            file: fs.createReadStream(filepath),
+            custom_id: document.getElementById('espresso_custom_id').value
+          }
+        };
+
+    }
+
+
+
+
+    request(options, function (error, response, body) {
+      if(response.statusCode == 200){
+        console.log(body);
+        autostatus.innerHTML=body;
+        document.getElementById('espresso-loader').setAttribute("hidden",true);
+        document.getElementById('espressostatus').removeAttribute("hidden");
+        credentials_messages('success','Espresso Test Uploaded','espresso_messages',10)
+
+      }
+      else if (response.statusCode == 401) {
+        credentials_messages('error','Error 401: Unauthorized','espresso_messages',10)
+        document.getElementById('espresso-loader').setAttribute("hidden",true);
+        document.getElementById('espressostatus').removeAttribute("hidden");
+
+      }else {
+        credentials_messages('error','Error '+response.statusCode+': '+response.statusText,'espresso_messages',10)
+        document.getElementById('espresso-loader').setAttribute("hidden",true);
+        document.getElementById('espressostatus').removeAttribute("hidden");
+      }
+
+    });
   }
 
-
-
-
-  request(options, function (error, response, body) {
-    if (error) throw new Error(error);
-    console.log(body);
-    autostatus.innerHTML=body;
-    document.getElementById('espresso-loader').setAttribute("hidden",true);
-    document.getElementById('espressostatus').removeAttribute("hidden");
-
-  });
 });
 
 // --------------- Get Recent Upload on espresso  --------------------//
@@ -77,12 +100,18 @@ upload.addEventListener('click', (event) => {
 function load_apps() {
   var username=document.getElementById('username').value
   var key=document.getElementById('accesskey').value
+  if(!username || !key){
+    credentials_messages('error','Username/Accesskey not set on Credentials Page','espresso_messages',10)
+  }
+  else{
   var options = {
     method: 'GET',
     url: 'https://'+username+':'+key+'@api-cloud.browserstack.com/app-automate/espresso/test-suites',
   };
 
   request(options, function (error, response, body) {
+
+    if(response.statusCode == 200){
     if (error) throw new Error(error);
 
   var customers = new Array();
@@ -157,9 +186,15 @@ function load_apps() {
            for (var i = 0; i < x.length; i++) {
              x[i].innerHTML = '<img src ="assets/img/trash.png" ,alt="delete" class="icon">'
            }
+}
+else if (response.statusCode == 401) {
+  credentials_messages('error','Error 401: Unauthorized','espresso_messages',10)
 
+}else {
+  credentials_messages('error','Error '+response.statusCode+': '+response.statusText,'espresso_messages',10)
+}
   });
-
+}
 }
 
 
@@ -169,21 +204,35 @@ function load_apps() {
 function deleteapp(element) {
   var username=document.getElementById('username').value
   var key=document.getElementById('accesskey').value
-  console.log(element);
-  var options = {
-    url: 'https://'+username+':'+key+'@api-cloud.browserstack.com/app-automate/espresso/test-suites/'+element,
-    method: 'DELETE'
-};
-console.log(options);
-function callback(error, response, body) {
-    if (!error && response.statusCode == 200) {
-        console.log(body);
-        load_apps();
-    }
+  if(!username || !key){
+    credentials_messages('error','Username/Accesskey not set on Credentials Page','espresso_messages',10)
+  }
+  else{
+    console.log(element);
+    element = element.replace("bs://","")
+    var options = {
+      url: 'https://'+username+':'+key+'@api-cloud.browserstack.com/app-automate/espresso/test-suites/'+element,
+      method: 'DELETE'
+  };
+  console.log(options);
+  function callback(error, response, body) {
+      if (!error && response.statusCode == 200) {
+          console.log(body);
+          load_apps();
+            credentials_messages('success','App Delete Successfull','espresso_messages',10)
+      }
+      else if (response.statusCode == 401) {
+        credentials_messages('error','Error 401: Unauthorized','espresso_messages',10)
 
-}
-request(options, callback);
-load_apps();
+      }else {
+        credentials_messages('error','Error '+response.statusCode+': '+body,'espresso_messages',10)
+      }
+
+  }
+  request(options, callback);
+  load_apps();
+  }
+
 }
 
 // --------------- Copy dir id --------------------//
@@ -191,6 +240,7 @@ load_apps();
 function copyappid(elementid) {
   console.log(elementid);
   clipboard.writeText(elementid);
+  credentials_messages('info','Copied','espresso_messages',3)
 }
 
 // --------------- Generate App Options List --------------------//
@@ -198,35 +248,47 @@ espresso_app_options.addEventListener('click',(event) => {
 
   var username=document.getElementById('username').value
   var key=document.getElementById('accesskey').value
-  var options = {
-    method: 'GET',
-    url: 'https://'+username+':'+key+'@api-cloud.browserstack.com/app-automate/recent_apps'
-  };
-function callback(error, response, body) {
-    if (!error && response.statusCode == 200) {
-      espresso_app.innerHTML = ""
+  if(!username || !key){
+    credentials_messages('error','Username/Accesskey not set on Credentials Page','espresso_messages',10)
+  }
+  else {
+    var options = {
+      method: 'GET',
+      url: 'https://'+username+':'+key+'@api-cloud.browserstack.com/app-automate/recent_apps'
+    };
+  function callback(error, response, body) {
+      if (!error && response.statusCode == 200) {
+        console.log(body);
+        espresso_app.innerHTML = ""
 
-      var options = document.createElement('option')
-      options.setAttribute("id","app-option1")
-      options.setAttribute("value","<hashed appid>")
-      espresso_app.appendChild(options)
-      document.getElementById('app-option1').innerHTML = "Select App"
-        parsedbody = JSON.parse(body);
-        for(i=0;i<parsedbody.length;i++){
-          var options = document.createElement('option')
-          options.setAttribute("value",parsedbody[i].app_id)
-          options.setAttribute("id",parsedbody[i].app_id)
+        var options = document.createElement('option')
+        options.setAttribute("id","app-option1")
+        options.setAttribute("value","<hashed appid>")
+        espresso_app.appendChild(options)
+        document.getElementById('app-option1').innerHTML = "Select App"
+          parsedbody = JSON.parse(body);
+          for(i=0;i<parsedbody.length;i++){
+            var options = document.createElement('option')
+            options.setAttribute("value",parsedbody[i].app_id)
+            options.setAttribute("id",parsedbody[i].app_id)
 
-          espresso_app.appendChild(options)
-          document.getElementById(parsedbody[i].app_id).innerHTML =parsedbody[i].app_name+"-"+parsedbody[i].app_version
-        }
-    }
-    else {
-      console.log("error");
-    }
-}
+            espresso_app.appendChild(options)
+            document.getElementById(parsedbody[i].app_id).innerHTML =parsedbody[i].app_name+"-"+parsedbody[i].app_version
+          }
+      }
+      else if (response.statusCode == 401) {
+        credentials_messages('error','Error 401: Unauthorized','espresso_messages',10)
 
-request(options, callback);
+      }else {
+        credentials_messages('error','Error '+response.statusCode+': '+response.statusText,'espresso_messages',10)
+      }
+
+      }
+
+
+  request(options, callback);
+  }
+
 });
 
 // --------------- Generate Test App Options List --------------------//
@@ -234,34 +296,43 @@ request(options, callback);
 espresso_testapp_options.addEventListener('click',(event) => {
   var username=document.getElementById('username').value
   var key=document.getElementById('accesskey').value
-  var options = {
-    method: 'GET',
-    url: 'https://'+username+':'+key+'@api-cloud.browserstack.com/app-automate/espresso/test-suites'
-  };
-function callback(error, response, body) {
-    if (!error && response.statusCode == 200) {
-        parsedbody = JSON.parse(body);
-        espresso_test_app.innerHTML = ""
-        var options = document.createElement('option')
-        options.setAttribute("id","test-option1")
-        options.setAttribute("value","<hashed testid>")
-        espresso_test_app.appendChild(options)
-        document.getElementById('test-option1').innerHTML = "Select Test"
-        for(i=0;i<parsedbody.length;i++){
+  if(!username || !key){
+    credentials_messages('error','Username/Accesskey not set on Credentials Page','espresso_messages',10)
+  }
+  else {
+    var options = {
+      method: 'GET',
+      url: 'https://'+username+':'+key+'@api-cloud.browserstack.com/app-automate/espresso/test-suites'
+    };
+  function callback(error, response, body) {
+      if (!error && response.statusCode == 200) {
+          parsedbody = JSON.parse(body);
+          espresso_test_app.innerHTML = ""
           var options = document.createElement('option')
-          options.setAttribute("value",parsedbody[i].test_suite_id)
-          options.setAttribute("id",parsedbody[i].test_suite_id)
-
+          options.setAttribute("id","test-option1")
+          options.setAttribute("value","<hashed testid>")
           espresso_test_app.appendChild(options)
-          document.getElementById(parsedbody[i].test_suite_id).innerHTML =parsedbody[i].test_suite_name
-        }
-    }
-    else {
-      console.log(response);
-    }
-}
+          document.getElementById('test-option1').innerHTML = "Select Test"
+          for(i=0;i<parsedbody.length;i++){
+            var options = document.createElement('option')
+            options.setAttribute("value",parsedbody[i].test_suite_id)
+            options.setAttribute("id",parsedbody[i].test_suite_id)
 
-request(options, callback);
+            espresso_test_app.appendChild(options)
+            document.getElementById(parsedbody[i].test_suite_id).innerHTML =parsedbody[i].test_suite_name
+          }
+      }
+      else if (response.statusCode == 401) {
+        credentials_messages('error','Error 401: Unauthorized','espresso_messages',10)
+
+      }else {
+        credentials_messages('error','Error '+response.statusCode+': '+response.statusText,'espresso_messages',10)
+      }
+  }
+
+  request(options, callback);
+  }
+
 });
 
 // --------------- Loading Apps in Dropdown --------------------//
@@ -286,6 +357,9 @@ copy.addEventListener('click',(event) => {
 
   clipboard.writeText(document.getElementById('espresso-curl-textarea').value)
   console.log("copied");
+  credentials_messages('info','Copied','espresso_messages',3)
+
+
 });
 
 // --------------- Generating code snippet --------------------//
@@ -305,7 +379,7 @@ function espresso_curl_text(string,variable) {
     break;
     case 'run':
       if(!app || !test || !device){
-        console.log("MIssing either app/test/device");
+        credentials_messages('error','Select valid Device/app/Test','espresso_messages',10)
       }
       else{
         console.log("call running function: App="+app+" Test:"+test+" Device:"+device);
@@ -361,52 +435,64 @@ var data = "";
 function android_device_list() {
   var username=document.getElementById('username').value
   var key=document.getElementById('accesskey').value
+  if(!username || !key){
+    credentials_messages('error','Username/Accesskey not set on Credentials Page','espresso_messages',10)
+  }
+  else {
+    var options = {
+      url: 'https://'+username+':'+key+'@api-cloud.browserstack.com/app-automate/devices.json',
+  };
 
-  var options = {
-    url: 'https://'+username+':'+key+'@api-cloud.browserstack.com/app-automate/devices.json',
-};
-
-function callback(error, response, body) {
-    if (!error && response.statusCode == 200) {
-
-
-        // console.log(body);
-
-        parsedbody = JSON.parse(body);
-        var device_div = document.getElementById('espresso-device-list');
-        for(i=0; i<parsedbody.length;i++){
-          if(parsedbody[i].os=='android'){
-            var select = document.createElement('input')
-            select.setAttribute("type","checkbox");
-            select.setAttribute("class","devices");
-            select.setAttribute("name",parsedbody[i].device+"-"+parsedbody[i].os_version);
-            select.setAttribute("id",parsedbody[i].device+"-"+parsedbody[i].os_version);
-            select.setAttribute("value",parsedbody[i].device+"-"+parsedbody[i].os_version);
-            select.addEventListener('change',function(){
-              device_change(this);
-            });
-            var label = document.createElement('label')
-            label.setAttribute("for",parsedbody[i].device+"-"+parsedbody[i].os_version);
-            label.setAttribute("id",parsedbody[i].device+"-"+parsedbody[i].os_version+"label");
+  function callback(error, response, body) {
+      if (!error && response.statusCode == 200) {
 
 
+          // console.log(body);
 
-            // var device_div = document.getElementById('espresso-device-list');
-            device_div.appendChild(select);
-            device_div.appendChild(label);
-            var br = document.createElement('br');
-            device_div.appendChild(br);
-            document.getElementById(parsedbody[i].device+"-"+parsedbody[i].os_version+"label").innerHTML = parsedbody[i].device+"-"+parsedbody[i].os_version
-            // console.log(parsedbody[i].device+"-"+parsedbody[i].os_version);
+          parsedbody = JSON.parse(body);
+          var device_div = document.getElementById('espresso-device-list');
+          for(i=0; i<parsedbody.length;i++){
+            if(parsedbody[i].os=='android'){
+              var select = document.createElement('input')
+              select.setAttribute("type","checkbox");
+              select.setAttribute("class","devices");
+              select.setAttribute("name",parsedbody[i].device+"-"+parsedbody[i].os_version);
+              select.setAttribute("id",parsedbody[i].device+"-"+parsedbody[i].os_version);
+              select.setAttribute("value",parsedbody[i].device+"-"+parsedbody[i].os_version);
+              select.addEventListener('change',function(){
+                device_change(this);
+              });
+              var label = document.createElement('label')
+              label.setAttribute("for",parsedbody[i].device+"-"+parsedbody[i].os_version);
+              label.setAttribute("id",parsedbody[i].device+"-"+parsedbody[i].os_version+"label");
+
+
+
+              // var device_div = document.getElementById('espresso-device-list');
+              device_div.appendChild(select);
+              device_div.appendChild(label);
+              var br = document.createElement('br');
+              device_div.appendChild(br);
+              document.getElementById(parsedbody[i].device+"-"+parsedbody[i].os_version+"label").innerHTML = parsedbody[i].device+"-"+parsedbody[i].os_version
+              // console.log(parsedbody[i].device+"-"+parsedbody[i].os_version);
+
+            }
+
 
           }
+      }
+      else if (response.statusCode == 401) {
+        credentials_messages('error','Error 401: Unauthorized','espresso_messages',10)
+
+      }else {
+        credentials_messages('error','Error '+response.statusCode+': '+response.statusText,'espresso_messages',10)
+      }
+  }
+
+  request(options, callback);
+  }
 
 
-        }
-    }
-}
-
-request(options, callback);
 
 }
 
@@ -429,35 +515,43 @@ document.getElementById('run_espresso').addEventListener('click',(event)=>{
 function running_espresso(app,test,device) {
   var username=document.getElementById('username').value
   var key=document.getElementById('accesskey').value
-
-while (device.includes("\\\"")) {
-  device = device.replace("\\\"","\"")
-}
-
-  var headers = {
-      'Content-Type': 'application/json'
-    };
-    var dataString = '{"devices": ['+device+'], "app": "bs://'+app+'", "deviceLogs" : true, "testSuite": "bs://'+test+'"}';
-console.log(dataString);
-    var options = {
-      url: 'https://'+username+':'+key+'@api-cloud.browserstack.com/app-automate/espresso/build',
-      method: 'POST',
-      headers: headers,
-      body: dataString
-    };
-
-    function callback(error, response, body) {
-      if (!error && response.statusCode == 200) {
-          console.log(body);
-          // console.log(error);
-          // console.log(response);
-      }
-      else {
-        console.log(error);
-        console.log(response);
-      }
+  if(!username || !key){
+    credentials_messages('error','Username/Accesskey not set on Credentials Page','espresso_messages',10)
+  }
+  else {
+    while (device.includes("\\\"")) {
+      device = device.replace("\\\"","\"")
     }
 
-    request(options, callback);
+      var headers = {
+          'Content-Type': 'application/json'
+        };
+        var dataString = '{"devices": ['+device+'], "app": "bs://'+app+'", "deviceLogs" : true, "testSuite": "bs://'+test+'"}';
+    console.log(dataString);
+        var options = {
+          url: 'https://'+username+':'+key+'@api-cloud.browserstack.com/app-automate/espresso/build',
+          method: 'POST',
+          headers: headers,
+          body: dataString
+        };
+
+        function callback(error, response, body) {
+          if (!error && response.statusCode == 200) {
+              console.log(body);
+              credentials_messages('success','Test Launched','espresso_messages',10)
+
+          }
+          else if (response.statusCode == 401) {
+            credentials_messages('error','Error 401: Unauthorized','espresso_messages',10)
+
+          }else {
+            credentials_messages('error','Error '+response.statusCode+': '+response.statusText,'espresso_messages',10);
+          }
+
+        }
+
+
+      request(options, callback);
+  }
 
 }
