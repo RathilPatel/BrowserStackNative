@@ -1,4 +1,4 @@
-# <img src="https://www.browserstack.com/blog/favicon.png" width="60px" align="center" alt="Electron API Demos icon"> Browserstack Native [WIP]
+# <img src="https://www.browserstack.com/blog/favicon.png" width="60px" align="center" alt="BrowserstackNative"> Browserstack Native [WIP]
 
 ## Using
 
