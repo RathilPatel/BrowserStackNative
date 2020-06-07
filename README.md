@@ -10,7 +10,7 @@ You'll need [Node.js](https://nodejs.org) installed on your computer in order to
 
 ```bash
 $ git clone https://github.com/RathilVasani/BrowserStackNative.git
-$ cd electron-api-demos
+$ cd BrowserStackNative
 $ npm install
 $ npm start
 ```
