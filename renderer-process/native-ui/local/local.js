@@ -57,8 +57,37 @@ startlocal.addEventListener('click', (event) => {
       }
       else if(hostOS.match(/mswin|msys|mingw|cygwin|bccwin|wince|emc|win32/i)) {
         console.log("Windows");
+        local_process = spawn("./assets/local/BrowserStackLocal.exe",['-k',key])
+        local_process.stdout.on('data',(data) => {
+          logs = document.getElementById('local_output').innerHTML;
+          document.getElementById('local_output').innerHTML = logs+"<br>"+data;
+          console.log(`data: ${data}`);
+          updateScroll();
+          if(data.includes("[SUCCESS] You can now access your local server(s) in our remote browser")){
+            credentials_messages("success","Binary Started Visit http://localhost:45454 for Advance settings","local_messages",0);
+          }
+          else{
+            console.log('not started running yet!!');
+          }
+        });
+        local_process.stderr.on('data',(err) => {
+          logs = document.getElementById('local_output').innerHTML;
+          document.getElementById('local_output').innerHTML = logs+"<br>"+err;
+          console.log(`error: ${err}`);
+          updateScroll();
+          document.getElementById('local_status').innerHTML = 'LocalTesting: Not Running';
+          credentials_messages("error","Error Starting Binary kindly refer the logs below","local_messages",15);
+
+
+        });
+
+        console.log("Process Id for local: "+local_process.pid);
+        document.getElementById('local_status').innerHTML = 'LocalTesting: Running';
+        credentials_messages("success","Starting Binary......","local_messages",0);
       }
       else {
+        credentials_messages("error","Only works on Windows and MAC","local_messages",5);
+
           console.log("Error: Only mac and windows supported right now");
       }
     }
