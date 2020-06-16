@@ -95,6 +95,11 @@ startlocal.addEventListener('click', (event) => {
 });
 
 stoplocal.addEventListener('click', (event) => {
+  hostOS = process.platform;
+  is64bits = process.arch == 'x64';
+  console.log(hostOS);
+  console.log(is64bits);
+  if(hostOS.match(/darwin|mac os/i)){
   if(document.getElementById('local_status').innerHTML != 'LocalTesting: Not Running'){
     stop_local = spawn("kill",[local_process.pid])
     stop_local.stdout.on('data',(data)=>{
@@ -110,6 +115,26 @@ stoplocal.addEventListener('click', (event) => {
 }
 else {
   credentials_messages("info","Binary not Running","local_messages",5);
+
+}
+}else if(hostOS.match(/mswin|msys|mingw|cygwin|bccwin|wince|emc|win32/i)) {
+  if(document.getElementById('local_status').innerHTML != 'LocalTesting: Not Running'){
+    stop_local = spawn("taskkill",["/F","/PID",local_process.pid])
+    stop_local.stdout.on('data',(data)=>{
+      console.log(`data: ${data}`);
+    });
+    stop_local.stderr.on('data',(err) => {
+      console.log(`error: ${err}`);
+    });
+    document.getElementById('local_status').innerHTML = 'LocalTesting: Not Running';
+    credentials_messages("success","Binary Stopped","local_messages",5);
+
+
+}
+else {
+  credentials_messages("info","Binary not Running","local_messages",5);
+
+}
 
 }
 
