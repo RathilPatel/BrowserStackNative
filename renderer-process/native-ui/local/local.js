@@ -57,7 +57,7 @@ startlocal.addEventListener('click', (event) => {
       }
       else if(hostOS.match(/mswin|msys|mingw|cygwin|bccwin|wince|emc|win32/i)) {
         console.log("Windows");
-        local_process = spawn("./assets/local/BrowserStackLocal.exe",['-k',key])
+        local_process = spawn("./assets/local/BrowserStackLocal.exe",['--key',key])
         local_process.stdout.on('data',(data) => {
           logs = document.getElementById('local_output').innerHTML;
           document.getElementById('local_output').innerHTML = logs+"<br>"+data;
