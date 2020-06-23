@@ -23,6 +23,9 @@
     "prepack": "check-for-leaks",
     "prepush": "check-for-leaks"
   },
+  "build": {
+    "extraResources": ["./assets/local/**"]
+  },
   "repository": "https://github.com/RathilVasani/BrowserStackNative",
   "keywords": [
     "BrowserStack",

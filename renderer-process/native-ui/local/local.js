@@ -27,7 +27,13 @@ startlocal.addEventListener('click', (event) => {
       console.log(hostOS);
       console.log(is64bits);
       if(hostOS.match(/darwin|mac os/i)){
-          local_process = spawn("./assets/local/BrowserStackLocal",['-k',key])
+        directory = __dirname + "/../../../assets/local/"
+        console.log(directory);
+        // local_process = spawn("echo",[__dirname])
+
+        // local_process = spawn("ls",["/Applications/BrowserStackNative.app/Contents/Resources/assets/local/"])
+
+          local_process = spawn("/Applications/BrowserStackNative.app/Contents/Resources/assets/local/BrowserStackLocal",['-k',key])
           local_process.stdout.on('data',(data) => {
             logs = document.getElementById('local_output').innerHTML;
             document.getElementById('local_output').innerHTML = logs+"<br>"+data;
@@ -99,9 +105,9 @@ stoplocal.addEventListener('click', (event) => {
   is64bits = process.arch == 'x64';
   console.log(hostOS);
   console.log(is64bits);
-  if(hostOS.match(/darwin|mac os/i)){
+  if(hostOS.match(/mswin|msys|mingw|cygwin|bccwin|wince|emc|win32/i)){
   if(document.getElementById('local_status').innerHTML != 'LocalTesting: Not Running'){
-    stop_local = spawn("kill",[local_process.pid])
+    stop_local = spawn("taskkill",["/F","/PID",local_process.pid])
     stop_local.stdout.on('data',(data)=>{
       console.log(`data: ${data}`);
     });
@@ -117,9 +123,9 @@ else {
   credentials_messages("info","Binary not Running","local_messages",5);
 
 }
-}else if(hostOS.match(/mswin|msys|mingw|cygwin|bccwin|wince|emc|win32/i)) {
+}else if(hostOS.match(/darwin|mac os/i)) {
   if(document.getElementById('local_status').innerHTML != 'LocalTesting: Not Running'){
-    stop_local = spawn("taskkill",["/F","/PID",local_process.pid])
+    stop_local = spawn("kill",[local_process.pid])
     stop_local.stdout.on('data',(data)=>{
       console.log(`data: ${data}`);
     });
