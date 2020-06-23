@@ -27,11 +27,6 @@ startlocal.addEventListener('click', (event) => {
       console.log(hostOS);
       console.log(is64bits);
       if(hostOS.match(/darwin|mac os/i)){
-        directory = __dirname + "/../../../assets/local/"
-        console.log(directory);
-        // local_process = spawn("echo",[__dirname])
-
-        // local_process = spawn("ls",["/Applications/BrowserStackNative.app/Contents/Resources/assets/local/"])
 
           local_process = spawn("/Applications/BrowserStackNative.app/Contents/Resources/assets/local/BrowserStackLocal",['-k',key])
           local_process.stdout.on('data',(data) => {
@@ -63,7 +58,7 @@ startlocal.addEventListener('click', (event) => {
       }
       else if(hostOS.match(/mswin|msys|mingw|cygwin|bccwin|wince|emc|win32/i)) {
         console.log("Windows");
-        local_process = spawn("./assets/local/BrowserStackLocal.exe",['--key',key])
+        local_process = spawn("C:/Users/Administrator/AppData/Local/Programs/BStack-Native/resources/assets/local/BrowserStackLocal.exe",['--key',key])
         local_process.stdout.on('data',(data) => {
           logs = document.getElementById('local_output').innerHTML;
           document.getElementById('local_output').innerHTML = logs+"<br>"+data;
