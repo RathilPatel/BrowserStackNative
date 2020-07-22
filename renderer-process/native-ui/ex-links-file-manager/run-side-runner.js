@@ -47,7 +47,7 @@ other = "\""+other+"\""
   // var caps="-c \"browserName=\'"+browser+"\' version=\'"+browser_version+"\' platform=\'"+os+"\' "+other+"\""
   var idecmd ="selenium-side-runner " + filepath + " -w "+parallel+" --server" + server + " -c " + caps
   // alert(idecmd)
-  // console.log("Here is the final command getting executed:  "+idecmd);
+  console.log("Here is the final command getting executed:  "+idecmd);
 
 
   // const reply = ipcRenderer.sendSync('execute', idecmd)
