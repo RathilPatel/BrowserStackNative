@@ -1,44 +1,37 @@
 <template class="task-template">
-  <section id="app-automate-section" class="section js-section u-category-native-ui">
-    <header class="section-header">
-      <div class="section-wrapper">
-        <h1>
-          <svg class="section-icon"><use xlink:href="assets/img/icons.svg#icon-native-ui"></use></svg>
-          App Automate Logs
-        </h1>
-        <!-- <span id="appautomate_messages">
+	<section
+		id="app-automate-section"
+		class="section js-section u-category-native-ui"
+	>
+		<header class="section-header">
+			<div class="section-wrapper">
+				<h1>
+					<svg class="section-icon">
+						<use xlink:href="assets/img/icons.svg#icon-native-ui"></use>
+					</svg>
+					App Automate Logs
+				</h1>
 
+				Session ID :
+				<input type="text" name="" value="" id="app_automate_session_id" />
+				<button type="button" name="button" id="app_automate_get_logs">
+					Get Session Logs
+				</button>
 
-        </span> -->
-        <!-- <h3>Upload your App for Automation Testing</h3>
-        <form id='appautomate'>
+				<br />
 
-        Select your .apk/.ipa file: <input type="file" id="appautomatefile"><br><br>
-        Custom id (Optional) : <input type="text" name="" id="app_auto_custom_id" value="">
-        <div id="appautostatu">
-<img src="./assets/img/loader.gif" id="loader" alt="" style="height:50px;width:50px" hidden>
-<p id="appautostatus" hidden></p>
+				Build ID:
+				<input type="text" name="" value="" id="app_automate_build_id" />
+				<button type="button" name="button" id="app_automate_get_build_logs">
+					Get Build Logs
+				</button>
 
-      </div>
-          <br>
-        <input id='uploadappautomate' type="button" value="Upload">
-        </form>
-        <div class="demo">
-    <button type="button" name="button" id="getapp" onclick=load_apps>Get Uploaded App for App-Automate</button>
-    <br>
-    <br>
-    <div class="" id="app_table" style="overflow-x:auto;">
+				<div id="app_automate_logs"></div>
+			</div>
+		</header>
 
-    </div>
-            </div> -->
-      </div>
-    </header>
-
-
-
-    <script type="text/javascript">
-      require('./renderer-process/native-ui/app-automate/app-automate.js');
-            </script>
-
-  </section>
+		<script type="text/javascript">
+			require("./renderer-process/native-ui/app-automate/app-automate.js");
+		</script>
+	</section>
 </template>

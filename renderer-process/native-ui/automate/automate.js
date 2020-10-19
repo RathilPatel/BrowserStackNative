@@ -115,6 +115,7 @@ automate_get_logs.addEventListener("click", (event) => {
 	var username = document.getElementById("username").value;
 	var key = document.getElementById("accesskey").value;
 	console.log(automate_session_id);
+	automate_logs.innerHTML = ``;
 	var url =
 		"https://" +
 		username +
@@ -152,6 +153,7 @@ automate_get_build_logs.addEventListener("click", (event) => {
 	var build_id = document.getElementById("automate_build_id").value;
 	var username = document.getElementById("username").value;
 	var key = document.getElementById("accesskey").value;
+	automate_logs.innerHTML = ``;
 
 	var fetchLink = `https://${username}:${key}@api.browserstack.com/automate/builds/${build_id}/sessions.json`;
 
