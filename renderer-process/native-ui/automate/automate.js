@@ -1,127 +1,201 @@
 console.log("Automate Logs here!!");
 var request = require("request");
-var automate_get_logs = document.getElementById('automate_get_logs');
-var automate_logs = document.getElementById('automate_logs');
+var rp = require("request-promise");
+var AdmZip = require("adm-zip");
+var automate_get_logs = document.getElementById("automate_get_logs");
+var automate_logs = document.getElementById("automate_logs");
+var automate_get_build_logs = document.getElementById(
+	"automate_get_build_logs"
+);
 
-automate_get_logs.addEventListener('click',(event) =>{
-  var automate_session_id = document.getElementById('automate_session_id').value;
-  var username=document.getElementById('username').value
-  var key=document.getElementById('accesskey').value
-  console.log(automate_session_id);
-  var url = 'https://'+username+':'+key+'@api.browserstack.com/automate/sessions/'+automate_session_id+'.json'
-  console.log(url);
-  var options = {
-      url: url
-  };
+async function DownloadSessionDataAsZip(urls, username, key) {
+	var zip = AdmZip();
+	for (var url in urls) {
+		console.log(url, urls[url]);
+		const res = await rp(urls[url], {
+			auth: { user: username, pass: key },
+		});
+		zip.addFile(url, Buffer.alloc(res.length, res));
+	}
+	return zip.toBuffer();
+}
 
+function CreateTableFromSession(sessionDetails, username, key) {
+	var json_session = sessionDetails.automation_session;
+	var customers = new Array();
+	var automate_session_id = sessionDetails.automation_session.hashed_id;
 
-  request(options, function (error, response, body) {
-    console.log(response);
-    if(response.statusCode == 200){
-      if (error) throw new Error(error);
-      console.log(body);
-      console.log(response);
-      console.log(error);
-      parsedbody = JSON.parse(body);
-      // automate_logs.innerHTML=parsedbody.automation_session.build_name
-      // var build_name = parsedbody.automation_session.build_name
-      // var project_name = parsedbody.automation_session.project_name
-      // var video_url = parsedbody.automation_session.video_url
-      // var selenium_url = parsedbody.automation_session.selenium_logs_url
-      // var network_url = parsedbody.automation_session.har_logs_url
-      // var appium_logs = parsedbody.automation_session.appium_logs_url
-      // var session_name;
-      // if(parsedbody.automation_session.name == ""){
-      //     session_name = parsedbody.automation_session.hashed_id;
-      // }else {
-      //   session_name = parsedbody.automation_session.name;
-      // }
-      var json_session = parsedbody.automation_session
-      var customers = new Array();
+	for (x in json_session) {
+		customers.push([x, json_session[x]]);
+	}
+	// console.log(customers);
 
-      for (x in json_session){
-        customers.push([x,json_session[x]])
-        // var row = x+" : "+json_session[x]+"<br>";
-        // document.getElementById("automate_logs").innerHTML += row;
+	var table = document.createElement("TABLE");
+	table.border = "1";
+	table.style.tableLayout = "fixed";
+	table.style.overflowWrap = "break-word";
 
-      }
+	var initRow = table.insertRow(-1);
+	initRow.insertCell(-1).textContent = "Download All";
+	var downloadAll = document.createElement("button");
+	downloadAll.onclick = async () => {
+		var urls = {
+			"logs.txt": `https://api.browserstack.com/automate/sessions/${automate_session_id}/logs`,
+			"video.mp4": sessionDetails.automation_session.video_url,
+			"networkLogs.har": `https://api.browserstack.com/automate/sessions/${automate_session_id}/networklogs`,
+			"console_logs.txt": `https://api.browserstack.com/automate/sessions/${automate_session_id}/consolelogs`,
+			"selenium_logs.txt": `https://api.browserstack.com/automate/sessions/${automate_session_id}/seleniumlogs`,
+			"appium_logs.txt": `https://api.browserstack.com/automate/sessions/${automate_session_id}/appiumlogs`,
+		};
+		downloadAll.textContent = "Downloading.....";
+		downloadAll.disabled = true;
+		var zipBuffer = await DownloadSessionDataAsZip(urls, username, key);
+		download(zipBuffer, `${automate_session_id}.zip`);
+		downloadAll.textContent = "Save";
+		downloadAll.disabled = false;
+	};
+	downloadAll.textContent = "Save";
+	initRow.insertCell(-1).append(downloadAll);
+	//Get the count of columns.
+	var columnCount = customers[0].length;
 
-      var table = document.createElement("TABLE");
-      table.border = "1";
+	for (var i = 0; i < customers.length; i++) {
+		var row = table.insertRow(-1);
+		for (var j = 0; j < columnCount; j++) {
+			var cell = row.insertCell(-1);
+			if (j == columnCount - 1) {
+				// var string =
+				if (customers[i][0].includes("url")) {
+					console.log(customers[i][0]);
+					var a = document.createElement("a");
+					// var link = document.createTextNode("Open");
+					// a.appendChild(link);
+					a.setAttribute("href", customers[i][j]);
+					a.setAttribute("target", "__blank");
+					a.setAttribute("class", "external-link");
+					a.setAttribute("download", "");
+					a.textContent = customers[i][j];
+					cell.append(a);
+				} else if (customers[i][0].includes("logs")) {
+					var a = document.createElement("button");
+					// var link = document.createTextNode("Open");
+					// a.appendChild(link);
+					var link = `https://api.browserstack.com/automate/sessions/${automate_session_id}/logs`;
+					a.onclick = async () => {
+						request(
+							{ url: link },
+							{
+								auth: {
+									user: username,
+									pass: key,
+								},
+							}
+						).on("data", (data) => {
+							download(data.toString(), "logs.txt");
+						});
+					};
+					a.textContent = "Download logs";
+					cell.append(a);
+				} else {
+					cell.innerHTML = customers[i][j];
+				}
 
-      //Get the count of columns.
-      var columnCount = customers[0].length;
+				// cell.append(a);
+			} else {
+				cell.innerHTML = customers[i][j];
+			}
+		}
+	}
+	return table;
+}
 
-      for (var i = 0; i < customers.length; i++) {
-          row = table.insertRow(-1);
-          for (var j = 0; j < columnCount; j++) {
-              var cell = row.insertCell(-1);
-               if (j == columnCount-1) {
-                 // var string =
-                 if(customers[i][0].includes("url")){
-                   console.log(customers[i][0]);
-                   var a = document.createElement('a');
-                   // var link = document.createTextNode("Open");
-                   // a.appendChild(link);
-                   a.setAttribute('href',customers[i][j]);
-                   a.setAttribute('_target',"blank");
-                   a.setAttribute('class','external-link');
-                   cell.appendChild(a);
+automate_get_logs.addEventListener("click", (event) => {
+	var automate_session_id = document.getElementById("automate_session_id")
+		.value;
+	var username = document.getElementById("username").value;
+	var key = document.getElementById("accesskey").value;
+	console.log(automate_session_id);
+	var url =
+		"https://" +
+		username +
+		":" +
+		key +
+		"@api.browserstack.com/automate/sessions/" +
+		automate_session_id +
+		".json";
+	console.log(url);
+	var options = {
+		url: url,
+	};
 
-                 }
-                 else{
-                   cell.innerHTML = customers[i][j];
-                 }
+	request(options, function (error, response, body) {
+		console.log(response);
+		if (response.statusCode == 200) {
+			if (error) throw new Error(error);
+			// console.log(body);
+			// console.log(response);
+			// console.log(error);
+			var parsedbody = JSON.parse(body);
+			console.log(parsedbody);
 
+			var table = CreateTableFromSession(parsedbody, username, key);
 
-                cell.appendChild(a);
-              }
-              else {
-                cell.innerHTML = customers[i][j];
-              }
-          }
-      }
+			automate_logs.append(table);
+		} else {
+			automate_logs.textContent = `There was some error in getting logs for session ID ${automate_session_id}. Check if it is correct or try again later`;
+		}
+	});
+});
 
-      // var dvTable = document.getElementById("earlgrey_table");
-      automate_logs.innerHTML = "";
-      // automate_logs.appendChild(table);
+automate_get_build_logs.addEventListener("click", (event) => {
+	console.log("hit logs!!");
+	var build_id = document.getElementById("automate_build_id").value;
+	var username = document.getElementById("username").value;
+	var key = document.getElementById("accesskey").value;
 
-      // var customers = new Array();
-      // customers.push(["Name","App_Dir_URL","Delete","Copy URL"]);
-      //   parsedbody = JSON.parse(body);
-      //   console.log(parsedbody);
-      //   for(var i= 0;i<parsedbody.length;i++){
-      //     customers.push([parsedbody[i].app_dir_name,parsedbody[i].app_dir_id,parsedbody[i].app_dir_id,parsedbody[i].app_dir_id]);
-      //
-      //   }
+	var fetchLink = `https://${username}:${key}@api.browserstack.com/automate/builds/${build_id}/sessions.json`;
 
+	request({ url: fetchLink }, async (err, response, body) => {
+		console.log(err, response, body);
+		if (err) throw err;
+		if (response.statusCode === 200) {
+			var sessionArr = JSON.parse(body);
 
+			var downloadAll = document.createElement("button");
+			downloadAll.textContent = "Download All Session's Data";
+			downloadAll.onclick = async () => {
+				downloadAll.textContent = "Downloading.....";
+				downloadAll.disabled = true;
+				var zip = AdmZip();
+				for (var sessionDetails of sessionArr) {
+					var automate_session_id = sessionDetails.automation_session.hashed_id;
+					var urls = {
+						"logs.txt": `https://api.browserstack.com/automate/sessions/${automate_session_id}/logs`,
+						"video.mp4": sessionDetails.automation_session.video_url,
+						"networkLogs.har": `https://api.browserstack.com/automate/sessions/${automate_session_id}/networklogs`,
+						"console_logs.txt": `https://api.browserstack.com/automate/sessions/${automate_session_id}/consolelogs`,
+						"selenium_logs.txt": `https://api.browserstack.com/automate/sessions/${automate_session_id}/seleniumlogs`,
+						"appium_logs.txt": `https://api.browserstack.com/automate/sessions/${automate_session_id}/appiumlogs`,
+					};
+					var zipBuffer = await DownloadSessionDataAsZip(urls, username, key);
+					zip.addFile(`${automate_session_id}.zip`, zipBuffer);
+				}
+				download(zip, `${build_id}.zip`);
+				downloadAll.textContent = "Download All Session's Data";
+				downloadAll.disabled = false;
+			};
 
+			automate_logs.append(downloadAll);
 
-
-
-      // var logs =  '<p> Project : '+project_name+'<br> Build : '+build_name+' <br>Session_Name : '+session_name+'<br> Video : <a href="'+video_url+'" target="_blank">Download<span class="u-visible-to-screen-reader">(opens in new window)</span></a> <br>  Console Logs : Download <br>  Network Logs : Download <br>   Selenium Logs : <a href="'+selenium_url+'">Download<span class="u-visible-to-screen-reader">(opens in new window)</span> <br>   </p>'
-      // automate_logs.innerHTML = logs
-      // autostatus.innerHTML=body;
-      // document.getElementById('earlgrey-loader').setAttribute("hidden",true);
-      // document.getElementById('earlgreystatus').removeAttribute("hidden");
-      // credentials_messages('success','EarlGrey Test Uploaded','earlgrey_messages',10)
-
-    }
-    // else if (response.statusCode == 401) {
-    //   credentials_messages('error','Error 401: Unauthorized','earlgrey_messages',10)
-    //   document.getElementById('earlgrey-loader').setAttribute("hidden",true);
-    //   document.getElementById('earlgreystatus').removeAttribute("hidden");
-    //
-    // }
-    // else {
-    //   credentials_messages('error','Error '+response.statusCode+': '+response.statusText,'earlgrey_messages',10)
-    //   document.getElementById('earlgrey-loader').setAttribute("hidden",true);
-    //   document.getElementById('earlgreystatus').removeAttribute("hidden");
-    // }
-
-
-  });
-
-
+			sessionArr.forEach((sessionDetails) => {
+				var table = CreateTableFromSession(sessionDetails, username, key);
+				automate_logs.append(table);
+				automate_logs.append(document.createElement("br"));
+				automate_logs.append(document.createElement("hr"));
+				automate_logs.append(document.createElement("br"));
+			});
+		} else {
+			automate_logs.textContent = `Some error occured in fetching logs for build id: ${build_id}. Check the build id or try again later.`;
+		}
+	});
 });
