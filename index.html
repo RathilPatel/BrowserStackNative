@@ -1,118 +1,205 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
+	<head>
+		<meta charset="utf-8" />
 
-  <link rel="stylesheet" href="assets/css/variables.css">
-  <link rel="stylesheet" href="assets/css/nativize.css">
-  <link rel="stylesheet" href="assets/css/global.css">
-  <link rel="stylesheet" href="assets/css/about.css">
-  <link rel="stylesheet" href="assets/css/nav.css">
-  <link rel="stylesheet" href="assets/css/section.css">
-  <link rel="stylesheet" href="assets/css/demo.css">
-  <link rel="stylesheet" href="assets/css/github.css">
-  <link rel="stylesheet" href="assets/css/test.css">
+		<link rel="stylesheet" href="assets/css/variables.css" />
+		<link rel="stylesheet" href="assets/css/nativize.css" />
+		<link rel="stylesheet" href="assets/css/global.css" />
+		<link rel="stylesheet" href="assets/css/about.css" />
+		<link rel="stylesheet" href="assets/css/nav.css" />
+		<link rel="stylesheet" href="assets/css/section.css" />
+		<link rel="stylesheet" href="assets/css/demo.css" />
+		<link rel="stylesheet" href="assets/css/github.css" />
+		<link rel="stylesheet" href="assets/css/test.css" />
 
+		<link rel="import" href="sections/native-ui/ex-links-file-manager.html" />
+		<link rel="import" href="sections/native-ui/credentials.html" />
+		<link rel="import" href="sections/native-ui/local.html" />
+		<link rel="import" href="sections/native-ui/espresso-test.html" />
+		<link rel="import" href="sections/native-ui/xcui-test.html" />
+		<link rel="import" href="sections/native-ui/earlgrey-test.html" />
+		<link rel="import" href="sections/native-ui/applive.html" />
+		<link rel="import" href="sections/native-ui/appautomateupload.html" />
+		<link rel="import" href="sections/native-ui/appautomate.html" />
+		<link rel="import" href="sections/native-ui/automate.html" />
+		<link rel="import" href="sections/native-ui/notifications.html" />
+		<link rel="import" href="sections/native-ui/dialogs.html" />
+		<link rel="import" href="sections/native-ui/tray.html" />
+		<link rel="import" href="sections/native-ui/drag.html" />
+		<script src="http://danml.com/js/download.js"></script>
+	</head>
+	<body>
+		<nav class="nav js-nav">
+			<header class="nav-header">
+				<h1 class="nav-title">BrowserStack <strong>Native</strong></h1>
+				<img
+					class="nav-header-icon"
+					src="assets/app-icon/png/1024.png"
+					alt=""
+				/>
+			</header>
+			<div class="nav-item u-category-native-ui">
+				<h5 class="nav-category">
+					<svg class="nav-icon">
+						<use xlink:href="assets/img/icons.svg#icon-native-ui"></use>
+					</svg>
+					BrowserStack Details
+				</h5>
+				<button
+					type="button"
+					id="button-credentials"
+					data-section="credentials"
+					class="nav-button"
+				>
+					Credentials
+				</button>
+				<!-- <button type="button" id="button-about" data-section="capabilities"class="nav-button">Capabilities</button> -->
+			</div>
+			<div class="nav-item u-category-native-ui">
+				<h5 class="nav-category">
+					<svg class="nav-icon">
+						<use xlink:href="assets/img/icons.svg#icon-native-ui"></use>
+					</svg>
+					Record and Playback
+				</h5>
+				<!-- <button type="button" id="button-ex-links-file-manager" data-modal="about" class="nav-button">Overview</button> -->
+				<button
+					type="button"
+					id="button-ex-links-file-manager"
+					data-section="ex-links-file-manager"
+					class="nav-button"
+				>
+					Run Test on BrowserStack
+				</button>
+			</div>
 
+			<div class="nav-item u-category-native-ui">
+				<h5 class="nav-category">
+					<svg class="nav-icon">
+						<use xlink:href="assets/img/icons.svg#icon-native-ui"></use>
+					</svg>
+					BrowserStack Local
+				</h5>
 
-  <link rel="import" href="sections/native-ui/ex-links-file-manager.html">
-  <link rel="import" href="sections/native-ui/credentials.html">
-  <link rel="import" href="sections/native-ui/local.html">
-  <link rel="import" href="sections/native-ui/espresso-test.html">
-  <link rel="import" href="sections/native-ui/xcui-test.html">
-  <link rel="import" href="sections/native-ui/earlgrey-test.html">
-  <link rel="import" href="sections/native-ui/applive.html">
-  <link rel="import" href="sections/native-ui/appautomateupload.html">
-  <link rel="import" href="sections/native-ui/appautomate.html">
-  <link rel="import" href="sections/native-ui/automate.html">
-  <link rel="import" href="sections/native-ui/notifications.html">
-  <link rel="import" href="sections/native-ui/dialogs.html">
-  <link rel="import" href="sections/native-ui/tray.html">
-  <link rel="import" href="sections/native-ui/drag.html">
+				<button
+					type="button"
+					id="button-ex-links-file-manager"
+					data-section="local"
+					class="nav-button"
+				>
+					Start/Stop Local Connection
+				</button>
+			</div>
+			<div class="nav-item u-category-native-ui">
+				<h5 class="nav-category">
+					<svg class="nav-icon">
+						<use xlink:href="assets/img/icons.svg#icon-native-ui"></use>
+					</svg>
+					App-Live
+				</h5>
 
+				<button
+					type="button"
+					id="button-ex-links-file-manager"
+					data-section="app-live"
+					class="nav-button"
+				>
+					Manage Apps
+				</button>
+			</div>
+			<div class="nav-item u-category-native-ui">
+				<h5 class="nav-category">
+					<svg class="nav-icon">
+						<use xlink:href="assets/img/icons.svg#icon-native-ui"></use>
+					</svg>
+					App-Automate
+				</h5>
 
-</head>
-<body>
+				<button
+					type="button"
+					id="button-ex-links-file-manager"
+					data-section="app-automate-upload"
+					class="nav-button"
+				>
+					Manage Apps
+				</button>
+				<button
+					type="button"
+					id="button-ex-links-file-manager"
+					data-section="espresso-test"
+					class="nav-button"
+				>
+					Run Espresso Test
+				</button>
+				<button
+					type="button"
+					id="button-ex-links-file-manager"
+					data-section="xcui-test"
+					class="nav-button"
+				>
+					Run XCUI Test
+				</button>
+				<button
+					type="button"
+					id="button-ex-links-file-manager"
+					data-section="earlgrey-test"
+					class="nav-button"
+				>
+					Run EarlGrey Test
+				</button>
+			</div>
+			<div class="nav-item u-category-native-ui">
+				<h5 class="nav-category">
+					<svg class="nav-icon">
+						<use xlink:href="assets/img/icons.svg#icon-native-ui"></use>
+					</svg>
+					Logs
+				</h5>
+				<button
+					type="button"
+					id="button-ex-links-file-manager"
+					data-section="automate"
+					class="nav-button"
+				>
+					Automate
+				</button>
+				<button
+					type="button"
+					id="button-ex-links-file-manager"
+					data-section="app-automate"
+					class="nav-button"
+				>
+					App-Automate
+				</button>
+			</div>
 
-  <nav class="nav js-nav">
-      <header class="nav-header">
-        <h1 class="nav-title">BrowserStack <strong>Native</strong></h1>
-        <img class="nav-header-icon" src="assets/app-icon/png/1024.png" alt="">
-      </header>
-      <div class="nav-item u-category-native-ui">
-        <h5 class="nav-category">
-          <svg class="nav-icon"><use xlink:href="assets/img/icons.svg#icon-native-ui"></use></svg>
-          BrowserStack Details</h5>
-          <button type="button" id="button-credentials" data-section="credentials" class="nav-button">Credentials</button>
-        <!-- <button type="button" id="button-about" data-section="capabilities"class="nav-button">Capabilities</button> -->
-      </div>
-      <div class="nav-item u-category-native-ui">
-      <h5 class="nav-category">
-        <svg class="nav-icon"><use xlink:href="assets/img/icons.svg#icon-native-ui"></use></svg>
-        Record and Playback</h5>
-        <!-- <button type="button" id="button-ex-links-file-manager" data-modal="about" class="nav-button">Overview</button> -->
-        <button type="button" id="button-ex-links-file-manager" data-section="ex-links-file-manager" class="nav-button">Run Test on BrowserStack</button>
-    </div>
+			<footer class="nav-footer">
+				<!-- <button type="button" id="button-about" data-modal="about" class="nav-footer-button">About</button> -->
+				<!-- <a class="nav-footer-logo" href="https://github.com" aria-label="Homepage"> -->
+				<!-- <svg class="nav-footer-icon"><use xlink:href="assets/img/icons.svg#icon-love"></use></svg> -->
+				<!-- </a> -->
+			</footer>
+		</nav>
 
-      <div class="nav-item u-category-native-ui">
-        <h5 class="nav-category">
-          <svg class="nav-icon"><use xlink:href="assets/img/icons.svg#icon-native-ui"></use></svg>
-          BrowserStack Local</h5>
+		<main class="content js-content"></main>
 
-        <button type="button" id="button-ex-links-file-manager" data-section="local" class="nav-button">Start/Stop Local Connection</button>
-      </div>
-      <div class="nav-item u-category-native-ui">
-        <h5 class="nav-category">
-          <svg class="nav-icon"><use xlink:href="assets/img/icons.svg#icon-native-ui"></use></svg>
-          App-Live</h5>
-
-        <button type="button" id="button-ex-links-file-manager" data-section="app-live" class="nav-button">Manage Apps</button>
-      </div>
-      <div class="nav-item u-category-native-ui">
-        <h5 class="nav-category">
-          <svg class="nav-icon"><use xlink:href="assets/img/icons.svg#icon-native-ui"></use></svg>
-          App-Automate</h5>
-
-        <button type="button" id="button-ex-links-file-manager" data-section="app-automate-upload" class="nav-button">Manage Apps</button>
-        <button type="button" id="button-ex-links-file-manager" data-section="espresso-test" class="nav-button">Run Espresso Test</button>
-        <button type="button" id="button-ex-links-file-manager" data-section="xcui-test" class="nav-button">Run XCUI Test</button>
-        <button type="button" id="button-ex-links-file-manager" data-section="earlgrey-test" class="nav-button">Run EarlGrey Test</button>
-      </div>
-      <!-- <div class="nav-item u-category-native-ui">
-       <h5 class="nav-category">
-         <svg class="nav-icon"><use xlink:href="assets/img/icons.svg#icon-native-ui"></use></svg>
-         Logs</h5>
-       <button type="button" id="button-ex-links-file-manager" data-section="automate" class="nav-button" disabled>Automate</button>
-       <button type="button" id="button-ex-links-file-manager" data-section="app-automate" class="nav-button" disabled>App-Automate</button>
-     </div> -->
-
-      <footer class="nav-footer">
-        <!-- <button type="button" id="button-about" data-modal="about" class="nav-footer-button">About</button> -->
-        <!-- <a class="nav-footer-logo" href="https://github.com" aria-label="Homepage"> -->
-          <!-- <svg class="nav-footer-icon"><use xlink:href="assets/img/icons.svg#icon-love"></use></svg> -->
-        </a>
-      </footer>
-    </nav>
-
-  <main class="content js-content"></main>
-
-  <script>
-    require('./assets/imports')
-    require('./assets/ex-links')
-    require('./assets/nav')
-    require('./assets/demo-btns')
-    require('./assets/code-blocks')
-    require('./assets/normalize-shortcuts')
-    require('./renderer-process/native-ui/ex-links-file-manager/file-manager')
-    require('./renderer-process/native-ui/local/local')
-    require('./renderer-process/native-ui/ex-links-file-manager/uploadautomate')
-    require('./renderer-process/native-ui/espresso/espresso')
-    require('./renderer-process/native-ui/xcui/xcui.js')
-    require('./renderer-process/native-ui/earlgrey/earlgrey.js')
-    require('./renderer-process/native-ui/ex-links-file-manager/applive.js')
-    require('./renderer-process/native-ui/app-automate/app-automate.js')
-    require('./renderer-process/native-ui/automate/automate.js')
-
-  </script>
-</body>
+		<script>
+			require("./assets/imports");
+			require("./assets/ex-links");
+			require("./assets/nav");
+			require("./assets/demo-btns");
+			require("./assets/code-blocks");
+			require("./assets/normalize-shortcuts");
+			require("./renderer-process/native-ui/ex-links-file-manager/file-manager");
+			require("./renderer-process/native-ui/local/local");
+			require("./renderer-process/native-ui/ex-links-file-manager/uploadautomate");
+			require("./renderer-process/native-ui/espresso/espresso");
+			require("./renderer-process/native-ui/xcui/xcui.js");
+			require("./renderer-process/native-ui/earlgrey/earlgrey.js");
+			require("./renderer-process/native-ui/ex-links-file-manager/applive.js");
+			require("./renderer-process/native-ui/app-automate/app-automate.js");
+			require("./renderer-process/native-ui/automate/automate.js");
+		</script>
+	</body>
 </html>

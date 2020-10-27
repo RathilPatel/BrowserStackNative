@@ -40,20 +40,21 @@
     "@octokit/rest": "^16.3.2",
     "check-for-leaks": "^1.2.1",
     "devtron": "^1.3.0",
-    "electron-packager": "^12.1.0",
+    "electron": "^7.2.43",
+    "electron-builder": "^22.4.1",
+    "electron-packager": "^15.1.0",
     "electron-winstaller": "^2.2.0",
     "husky": "^0.14.3",
     "npm-run-all": "^4.0.2",
     "request": "^2.70.0",
     "rimraf": "^2.5.2",
-    "signcode": "^0.5.0",
-    "spectron": "^5.0.0",
-    "standard": "^8.2.0",
-    "electron": "^7.2.43",
     "selenium-side-runner": "^3.17.0",
-    "electron-builder": "^22.4.1"
+    "signcode": "^0.5.0",
+    "spectron": "^12.0.0",
+    "standard": "^8.2.0"
   },
   "dependencies": {
+    "adm-zip": "^0.4.16",
     "browserstack-local": "^1.4.3",
     "electron-log": "^2.2.14",
     "electron-online": "^1.0.0",
@@ -64,6 +65,7 @@
     "glob": "^7.1.0",
     "highlight.js": "^9.3.0",
     "request": "^2.70.0",
+    "request-promise": "^4.2.6",
     "selenium-side-runner": "^3.17.0",
     "update-electron-app": "^1.1.1"
   }
